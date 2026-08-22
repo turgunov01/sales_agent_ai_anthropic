@@ -4,6 +4,16 @@ const PLATFORM_LOGIN = "/platform/login";
 export default defineNuxtRouteMiddleware(async (to) => {
   if (import.meta.server) return;
 
+  // Кабинет клиента и платформа разведены по хостам. Без этого корень
+  // admin-домена открывал бы форму входа кабинета, куда учётка оператора
+  // не подходит — и человек видел бы «неверный логин или пароль».
+  const platformHost = useRuntimeConfig().public.platformHost;
+  if (platformHost) {
+    const onPlatformHost = window.location.hostname === platformHost;
+    if (onPlatformHost && !to.path.startsWith("/platform")) return navigateTo("/platform");
+    if (!onPlatformHost && to.path.startsWith("/platform")) return navigateTo("/");
+  }
+
   // Платформенный раздел живёт на своей сессии и своём маршруте входа.
   if (to.path.startsWith("/platform")) {
     const platform = usePlatformAuthStore();

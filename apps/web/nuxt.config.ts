@@ -12,6 +12,10 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       apiBase: process.env.NUXT_PUBLIC_API_BASE ?? "http://localhost:4000/api/v1",
+      // Хост платформенной админки. Если задан — на нём доступен только
+      // раздел /platform, а на остальных хостах он, наоборот, закрыт.
+      // Пусто (dev) — доступны оба раздела.
+      platformHost: process.env.NUXT_PUBLIC_PLATFORM_HOST ?? "",
     },
   },
   app: {

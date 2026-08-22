@@ -27,7 +27,8 @@ async function submit(): Promise<void> {
     <p class="eyebrow mb-2 text-sand-400">Служебный вход</p>
     <h1 class="font-display mb-1 text-3xl font-extrabold text-sand-50">Платформа</h1>
     <p class="mb-8 text-sm text-sand-400">
-      Раздел оператора SaaS. Учётные записи компаний здесь не работают.
+      Раздел оператора SaaS. Учётная запись магазина здесь не подойдёт — для кабинета
+      магазина другой адрес и другой пароль.
     </p>
 
     <form class="surface flex flex-col gap-4 p-6" novalidate @submit.prevent="submit">
