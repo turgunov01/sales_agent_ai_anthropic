@@ -105,7 +105,12 @@ async function createProduct(): Promise<void> {
 }
 
 async function toggleActive(product: ProductDto): Promise<void> {
-  await api.patch(`/products/${product.id}`, { active: !product.active }).catch(() => undefined);
+  error.value = null;
+  try {
+    await api.patch(`/products/${product.id}`, { active: !product.active });
+  } catch (caught) {
+    error.value = caught instanceof Error ? caught.message : "Не удалось изменить видимость товара";
+  }
   await load();
 }
 

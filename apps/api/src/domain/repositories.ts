@@ -196,6 +196,11 @@ export interface ChannelsRepository {
   /** Один бот принадлежит одной компании: проверка владельца до привязки. */
   findByBotExternalId(botExternalId: string): Promise<ChannelEntity | null>;
   upsertByType(companyId: string, input: ChannelWriteInput): Promise<ChannelEntity>;
+  /**
+   * Открепляет бота: канал выключается, токен стирается, botExternalId
+   * освобождается — того же бота можно подключить к другой компании.
+   * Строка канала остаётся: на неё ссылается история диалогов.
+   */
   deactivate(companyId: string, channelId: string): Promise<boolean>;
 }
 

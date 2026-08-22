@@ -253,6 +253,54 @@ describe("каналы", () => {
     expect(stored?.botExternalId).toBe("987654321");
   });
 
+  it("открепляет бота: канал выключен, токен стёрт, история цела", async () => {
+    const channel = await connectTelegram(context, owner.accessToken);
+
+    const response = await request(context.app)
+      .delete(`/api/v1/channels/${channel.channelId}`)
+      .set(auth(owner.accessToken));
+    expect(response.status).toBe(204);
+
+    const stored = context.store.channels.find((entry) => entry.id === channel.channelId);
+    expect(stored?.isActive).toBe(false);
+    expect(stored?.botTokenCiphertext).toBe("");
+    expect(stored?.botExternalId).toBeNull();
+    // Строка канала не удалена — на неё ссылается история диалогов.
+    expect(context.store.channels).toHaveLength(1);
+    expect(context.telegram.calls.map((call) => call.method)).toContain("deleteWebhook");
+  });
+
+  it("после открепления можно подключить нового бота", async () => {
+    const channel = await connectTelegram(context, owner.accessToken);
+    await request(context.app)
+      .delete(`/api/v1/channels/${channel.channelId}`)
+      .set(auth(owner.accessToken));
+
+    context.telegram.identity = { id: 555000999, username: "new_shop_bot" };
+    const response = await request(context.app)
+      .post("/api/v1/channels/telegram")
+      .set(auth(owner.accessToken))
+      .send({ botToken: "987654321:BBFhBOweik6ad9r_ZeuFRFF-NEWtokenABCDEF" });
+
+    expect(response.status).toBe(201);
+    expect(response.body.data.botUsername).toBe("new_shop_bot");
+    expect(response.body.data.isActive).toBe(true);
+    expect(context.store.channels).toHaveLength(1);
+  });
+
+  it("verify на откреплённом канале объясняет, что делать", async () => {
+    const channel = await connectTelegram(context, owner.accessToken);
+    await request(context.app)
+      .delete(`/api/v1/channels/${channel.channelId}`)
+      .set(auth(owner.accessToken));
+
+    const response = await request(context.app)
+      .post("/api/v1/channels/telegram/verify")
+      .set(auth(owner.accessToken));
+
+    expect(response.status).toBe(409);
+    expect(response.body.error.message).toContain("Подключите нового бота");
+  });
   it("гасит канал, если Telegram отклонил webhook", async () => {
     context.telegram.failSetWebhook = true;
 

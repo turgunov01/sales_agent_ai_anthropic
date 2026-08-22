@@ -64,12 +64,21 @@ export function useApi() {
     if (options.contentType) headers["Content-Type"] = options.contentType;
 
     try {
-      return await $fetch<Envelope<T>>(`${config.public.apiBase}${path}`, {
-        method: options.method ?? "GET",
-        headers,
-        body: options.body as Record<string, unknown> | undefined,
-        query: options.query,
-      });
+      const payload = await $fetch<Envelope<T> | string | null>(
+        `${config.public.apiBase}${path}`,
+        {
+          method: options.method ?? "GET",
+          headers,
+          body: options.body as Record<string, unknown> | undefined,
+          query: options.query,
+        },
+      );
+
+      // 204 No Content: тела нет, читать .data нечего (DELETE-эндпоинты).
+      if (payload === null || payload === undefined || payload === "") {
+        return { success: true, data: undefined as T };
+      }
+      return payload as Envelope<T>;
     } catch (error) {
       const apiError = toApiError(error);
       const canRetry = apiError.status === 401 && options.allowRetry !== false;

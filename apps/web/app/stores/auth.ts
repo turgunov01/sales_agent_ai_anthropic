@@ -91,7 +91,11 @@ export const useAuthStore = defineStore("auth", () => {
     }
   }
 
-  async function fetchMe(): Promise<void> {
+  /**
+   * Загружает профиль. Если access-токен истёк — обновляет сессию и повторяет
+   * запрос: иначе user остаётся null и интерфейс молча теряет права.
+   */
+  async function fetchMe(allowRetry = true): Promise<void> {
     if (!accessToken.value) return;
     try {
       const response = await $fetch<ApiEnvelope<{ user: UserDto; company: CompanyDto }>>(
@@ -101,8 +105,13 @@ export const useAuthStore = defineStore("auth", () => {
       user.value = response.data.user;
       company.value = response.data.company;
     } catch {
+      if (!allowRetry) {
+        clear();
+        return;
+      }
       const refreshed = await refresh();
-      if (!refreshed) clear();
+      if (refreshed) await fetchMe(false);
+      else clear();
     }
   }
 

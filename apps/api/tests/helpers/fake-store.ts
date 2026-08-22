@@ -597,6 +597,8 @@ class FakeChannelsRepository implements ChannelsRepository {
     if (!channel) return false;
     channel.isActive = false;
     channel.botExternalId = null;
+    channel.botUsername = null;
+    channel.botTokenCiphertext = "";
     return true;
   }
 }

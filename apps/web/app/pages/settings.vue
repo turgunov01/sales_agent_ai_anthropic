@@ -20,7 +20,15 @@ const savingAi = ref(false);
 const newEmployee = reactive({ email: "", fullName: "", password: "", role: "MANAGER" });
 const employeeError = ref<string | null>(null);
 
-const telegram = computed(() => channels.value.find((channel) => channel.type === "TELEGRAM"));
+// Открепённый канал остаётся в базе ради истории диалогов,
+// но подключённым не считается — иначе не вставить токен нового бота.
+const telegram = computed(() =>
+  channels.value.find((channel) => channel.type === "TELEGRAM" && channel.isActive),
+);
+const detached = computed(() =>
+  channels.value.find((channel) => channel.type === "TELEGRAM" && !channel.isActive),
+);
+const showConnectForm = ref(false);
 
 async function load(): Promise<void> {
   loading.value = true;
@@ -47,6 +55,7 @@ async function connectTelegram(): Promise<void> {
   try {
     await api.post("/channels/telegram", { botToken: botToken.value.trim() });
     botToken.value = "";
+    showConnectForm.value = false;
     notice.value = "Бот подключён. Напишите ему в Telegram, чтобы проверить.";
     await load();
   } catch (caught) {
@@ -68,7 +77,20 @@ async function verifyTelegram(): Promise<void> {
 }
 
 async function disconnect(channelId: string): Promise<void> {
-  await api.del(`/channels/${channelId}`).catch(() => undefined);
+  const confirmed = window.confirm(
+    "Открепить бота? Он перестанет отвечать клиентам. История диалогов сохранится, " +
+      "а токен будет удалён — для возврата понадобится вставить его заново.",
+  );
+  if (!confirmed) return;
+
+  channelError.value = null;
+  try {
+    await api.del(`/channels/${channelId}`);
+    notice.value = "Бот откреплён. Можно подключить нового.";
+    showConnectForm.value = true;
+  } catch (caught) {
+    channelError.value = caught instanceof Error ? caught.message : "Не удалось открепить бота";
+  }
   await load();
 }
 
@@ -141,14 +163,11 @@ onMounted(load);
               <h2 class="font-display text-lg font-extrabold">Telegram</h2>
               <p class="text-sm text-ink-500">Первый и основной канал продаж.</p>
             </div>
-            <StatusPill
-              v-if="telegram"
-              :value="telegram.isActive ? 'ACTIVE' : 'CLOSED'"
-              kind="conversation"
-            />
+            <StatusPill v-if="telegram" value="ACTIVE" kind="conversation" />
+            <StatusPill v-else-if="detached" value="CLOSED" kind="conversation" />
           </div>
 
-          <div v-if="telegram" class="surface-quiet p-4">
+          <div v-if="telegram && !showConnectForm" class="surface-quiet p-4">
             <dl class="grid gap-4 sm:grid-cols-3">
               <div>
                 <dt class="eyebrow">Бот</dt>
@@ -169,31 +188,48 @@ onMounted(load);
               <button type="button" class="btn btn-ghost" @click="verifyTelegram">
                 Переустановить webhook
               </button>
+              <button type="button" class="btn btn-ghost" @click="showConnectForm = true">
+                Заменить бота
+              </button>
               <button type="button" class="btn btn-ghost" @click="disconnect(telegram.id)">
-                Отключить
+                Открепить бота
               </button>
             </div>
           </div>
 
-          <form
-            v-else-if="auth.canManage"
-            class="flex flex-col gap-3 sm:flex-row sm:items-end"
-            @submit.prevent="connectTelegram"
-          >
-            <div class="flex-1">
-              <label class="label" for="botToken">Токен бота от @BotFather</label>
-              <input
-                id="botToken"
-                v-model.trim="botToken"
-                class="field font-mono"
-                placeholder="123456789:AAE…"
-                required
-              />
-            </div>
-            <button type="submit" class="btn btn-primary" :disabled="connecting">
-              {{ connecting ? "Подключаем…" : "Подключить" }}
-            </button>
-          </form>
+          <div v-else-if="auth.canManage">
+            <p v-if="detached && !telegram" class="mb-3 text-sm text-ink-500">
+              Прежний бот откреплён, его токен удалён. История диалогов сохранена.
+            </p>
+            <p v-else-if="telegram" class="mb-3 text-sm text-ink-500">
+              Новый токен заменит текущего бота @{{ telegram.botUsername }}. Вебхук прежнего бота
+              будет снят автоматически.
+            </p>
+
+            <form class="flex flex-col gap-3 sm:flex-row sm:items-end" @submit.prevent="connectTelegram">
+              <div class="flex-1">
+                <label class="label" for="botToken">Токен бота от @BotFather</label>
+                <input
+                  id="botToken"
+                  v-model.trim="botToken"
+                  class="field font-mono"
+                  placeholder="123456789:AAE…"
+                  required
+                />
+              </div>
+              <button type="submit" class="btn btn-primary" :disabled="connecting">
+                {{ connecting ? "Подключаем…" : "Подключить" }}
+              </button>
+              <button
+                v-if="telegram"
+                type="button"
+                class="btn btn-ghost"
+                @click="showConnectForm = false"
+              >
+                Отмена
+              </button>
+            </form>
+          </div>
 
           <p v-else class="text-sm text-ink-500">Канал не подключён. Обратитесь к владельцу.</p>
 

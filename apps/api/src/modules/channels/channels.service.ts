@@ -88,6 +88,9 @@ export class ChannelsService {
   async verifyTelegram(auth: AuthContext): Promise<ChannelDto> {
     const channel = await this.repos.channels.findByType(auth.companyId, ChannelType.TELEGRAM);
     if (!channel) throw notFound("Telegram-канал не подключён");
+    if (!channel.isActive || channel.botTokenCiphertext.length === 0) {
+      throw conflict("Бот откреплён. Подключите нового бота, вставив его токен.");
+    }
 
     const botToken = decryptSecret(channel.botTokenCiphertext);
     const identity = await this.transport.getMe(botToken);
@@ -110,10 +113,12 @@ export class ChannelsService {
     const channel = await this.repos.channels.findById(auth.companyId, channelId);
     if (!channel) throw notFound("Канал не найден");
 
-    try {
-      await this.transport.deleteWebhook(decryptSecret(channel.botTokenCiphertext));
-    } catch (error) {
-      logger.warn({ err: error, channelId }, "Не удалось снять webhook, канал всё равно отключён");
+    if (channel.botTokenCiphertext.length > 0) {
+      try {
+        await this.transport.deleteWebhook(decryptSecret(channel.botTokenCiphertext));
+      } catch (error) {
+        logger.warn({ err: error, channelId }, "Не удалось снять webhook, бот всё равно откреплён");
+      }
     }
 
     await this.repos.channels.deactivate(auth.companyId, channelId);

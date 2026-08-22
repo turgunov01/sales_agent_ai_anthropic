@@ -11,7 +11,10 @@ export default defineNuxtRouteMiddleware(async (to) => {
     return;
   }
 
-  if (!auth.isAuthenticated) {
+  // Сессия могла быть сброшена внутри restore(): токен есть, а профиль загрузить
+  // не удалось — тогда это не вход, а мусор в localStorage.
+  if (!auth.isAuthenticated || !auth.user) {
+    auth.clear();
     return navigateTo({ path: "/login", query: to.path === "/" ? {} : { redirect: to.path } });
   }
 });

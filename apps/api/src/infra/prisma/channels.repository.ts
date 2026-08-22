@@ -63,7 +63,7 @@ export class PrismaChannelsRepository implements ChannelsRepository {
   async deactivate(companyId: string, channelId: string): Promise<boolean> {
     const result = await this.db.channel.updateMany({
       where: { id: channelId, companyId },
-      data: { isActive: false, botExternalId: null },
+      data: { isActive: false, botExternalId: null, botUsername: null, botTokenCiphertext: "" },
     });
     return result.count > 0;
   }
