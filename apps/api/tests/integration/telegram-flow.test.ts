@@ -342,3 +342,62 @@ describe("отказоустойчивость и ручной режим", () =
     expect(messages.body.data).toHaveLength(2);
   });
 });
+
+describe("подстраховка: лид не теряется, если модель не вызвала create_lead", () => {
+  it("интерес берётся из первого сообщения клиента, лид становится QUALIFIED", async () => {
+    // Модель отвечает текстом и ни разу не трогает инструменты.
+    context.llm.script(
+      textResponse("Подскажите, какой размер вам нужен?"),
+      textResponse("Спасибо! Менеджер свяжется с вами."),
+    );
+
+    await sendTelegramUpdate(
+      context,
+      channel,
+      telegramTextUpdate("Мне нужен угловой диван до 8 млн", { updateId: 300 }),
+    );
+    expect(context.store.leads).toHaveLength(0);
+
+    await sendTelegramUpdate(
+      context,
+      channel,
+      telegramTextUpdate("", { updateId: 301, contactPhone: "+998901234567" }),
+    );
+
+    expect(context.store.leads).toHaveLength(1);
+    const lead = context.store.leads[0];
+    expect(lead?.phone).toBe("+998901234567");
+    expect(lead?.interest).toBe("Мне нужен угловой диван до 8 млн");
+    expect(lead?.status).toBe("QUALIFIED");
+    expect(lead?.qualificationScore).toBeGreaterThanOrEqual(60);
+  });
+
+  it("не затирает интерес, который агент уже записал", async () => {
+    context.llm.script(
+      toolUseResponse(
+        "create_lead",
+        { interest: "Модульный диван с реклайнером, бюджет до 10 млн" },
+        { id: "t1" },
+      ),
+      textResponse("Записал."),
+      textResponse("Спасибо за номер!"),
+    );
+
+    await sendTelegramUpdate(
+      context,
+      channel,
+      telegramTextUpdate("Здравствуйте, интересует диван", { updateId: 310 }),
+    );
+    await sendTelegramUpdate(
+      context,
+      channel,
+      telegramTextUpdate("", { updateId: 311, contactPhone: "+998901234567" }),
+    );
+
+    expect(context.store.leads).toHaveLength(1);
+    expect(context.store.leads[0]?.interest).toBe(
+      "Модульный диван с реклайнером, бюджет до 10 млн",
+    );
+    expect(context.store.leads[0]?.status).toBe("QUALIFIED");
+  });
+});

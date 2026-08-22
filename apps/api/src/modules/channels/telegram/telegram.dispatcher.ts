@@ -17,6 +17,7 @@ import type {
   ConversationsService,
   OutboundDelivery,
 } from "../../conversations/conversations.service.js";
+import { deriveInterestFromHistory } from "../../leads/leads.interest.js";
 import type { LeadsService } from "../../leads/leads.service.js";
 import {
   CONTACT_BUTTON_LABEL,
@@ -28,6 +29,7 @@ import type { TelegramMessage, TelegramTransport, TelegramUpdate } from "./teleg
 
 const MAX_PRODUCT_CARDS = 3;
 const PROCESSED_UPDATES_LIMIT = 2000;
+const HISTORY_FOR_INTEREST = 20;
 
 interface ExtractedContent {
   content: string;
@@ -172,12 +174,22 @@ export class TelegramDispatcher implements OutboundDelivery {
 
     if (extracted.phone) {
       await this.repos.customers.setPhone(channel.companyId, customer.id, extracted.phone);
+
+      // Модель не всегда вызывает create_lead. Контакт без описания потребности
+      // бесполезен менеджеру, поэтому интерес берём из первого сообщения клиента.
+      const history = await this.conversations.history(
+        channel.companyId,
+        conversation.id,
+        HISTORY_FOR_INTEREST,
+      );
+
       await this.leads.upsertFromAgent(channel.companyId, {
         customerId: customer.id,
         conversationId: conversation.id,
         telegramUserId: customer.externalId,
         phone: extracted.phone,
         name: customer.firstName,
+        fallbackInterest: deriveInterestFromHistory(history),
       });
     }
 

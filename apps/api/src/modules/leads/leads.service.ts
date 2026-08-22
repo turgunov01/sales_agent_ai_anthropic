@@ -39,6 +39,11 @@ export interface AgentLeadInput {
   currency?: Currency;
   interestedProductIds?: string[];
   summary?: string | null;
+  /**
+   * Запасной интерес из переписки. Применяется, только когда ни агент,
+   * ни существующий лид интерес не задали.
+   */
+  fallbackInterest?: string | null;
 }
 
 export class LeadsService {
@@ -320,7 +325,7 @@ export class LeadsService {
     return {
       name: input.name ?? existing?.name ?? null,
       phone: phone ?? existing?.phone ?? null,
-      interest: input.interest ?? existing?.interest ?? null,
+      interest: input.interest ?? existing?.interest ?? input.fallbackInterest ?? null,
       budgetMin: input.budgetMin ?? existing?.budgetMin ?? null,
       budgetMax: input.budgetMax ?? existing?.budgetMax ?? null,
       interestedProductIds: this.mergeProductIds(
