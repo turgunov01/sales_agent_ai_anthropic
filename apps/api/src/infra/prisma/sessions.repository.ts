@@ -36,6 +36,15 @@ export class PrismaSessionsRepository implements SessionsRepository {
     });
   }
 
+  async revokeAllForCompany(companyId: string, at: Date): Promise<void> {
+    const users = await this.db.user.findMany({ where: { companyId }, select: { id: true } });
+    if (users.length === 0) return;
+    await this.db.session.updateMany({
+      where: { userId: { in: users.map((user) => user.id) }, revokedAt: null },
+      data: { revokedAt: at },
+    });
+  }
+
   async deleteExpired(before: Date): Promise<number> {
     const result = await this.db.session.deleteMany({ where: { expiresAt: { lt: before } } });
     return result.count;

@@ -53,6 +53,40 @@ export function verifyAccessToken(token: string): AuthContext {
   return { userId: payload.sub, companyId: payload.companyId, role: payload.role };
 }
 
+interface PlatformTokenPayload {
+  sub: string;
+  type: "platform";
+}
+
+/** Токен оператора платформы подписывается отдельным секретом. */
+export function signPlatformToken(adminId: string): string {
+  const payload: PlatformTokenPayload = { sub: adminId, type: "platform" };
+  return jwt.sign(payload, env.PLATFORM_JWT_SECRET, {
+    expiresIn: env.ACCESS_TOKEN_TTL as jwt.SignOptions["expiresIn"],
+  });
+}
+
+export function verifyPlatformToken(token: string): { adminId: string } {
+  let decoded: unknown;
+  try {
+    decoded = jwt.verify(token, env.PLATFORM_JWT_SECRET);
+  } catch {
+    throw unauthorized("Токен недействителен или истёк");
+  }
+
+  if (
+    typeof decoded !== "object" ||
+    decoded === null ||
+    (decoded as PlatformTokenPayload).type !== "platform"
+  ) {
+    throw unauthorized("Неверный тип токена");
+  }
+
+  const payload = decoded as PlatformTokenPayload;
+  if (!payload.sub) throw unauthorized("Токен неполный");
+  return { adminId: payload.sub };
+}
+
 /** Refresh-токен — случайная строка; в БД хранится только её SHA-256. */
 export function generateRefreshToken(): { token: string; hash: string } {
   const token = randomBytes(48).toString("base64url");

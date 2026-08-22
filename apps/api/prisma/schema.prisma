@@ -382,3 +382,56 @@ model LeadEvent {
   @@index([companyId, leadId, createdAt])
   @@map("lead_events")
 }
+
+// ───────────────────── Платформа (оператор SaaS) ─────────────────────────────
+// Эти сущности намеренно вне модели арендатора: платформенный админ
+// не принадлежит ни одной компании. См. docs/07-security-model.md.
+
+model PlatformAdmin {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  fullName     String
+  isActive     Boolean   @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  sessions PlatformSession[]
+  actions  PlatformAuditLog[]
+
+  @@map("platform_admins")
+}
+
+model PlatformSession {
+  id               String    @id @default(cuid())
+  adminId          String
+  refreshTokenHash String    @unique
+  userAgent        String?
+  ip               String?
+  expiresAt        DateTime
+  revokedAt        DateTime?
+  createdAt        DateTime  @default(now())
+
+  admin PlatformAdmin @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@index([adminId, expiresAt])
+  @@map("platform_sessions")
+}
+
+// Действия оператора над чужими данными обязаны быть прослеживаемы.
+model PlatformAuditLog {
+  id        String   @id @default(cuid())
+  adminId   String
+  action    String
+  companyId String?
+  details   Json?
+  ip        String?
+  createdAt DateTime @default(now())
+
+  admin PlatformAdmin @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@index([adminId, createdAt])
+  @@index([companyId, createdAt])
+  @@map("platform_audit_logs")
+}

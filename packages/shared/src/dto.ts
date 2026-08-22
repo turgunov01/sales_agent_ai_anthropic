@@ -196,3 +196,41 @@ export interface AnalyticsOverviewDto {
   conversionRate: number;
   daily: Array<{ date: string; leads: number; conversations: number }>;
 }
+
+// ───────────────────── Платформа (оператор SaaS) ─────────────────────────────
+
+export interface PlatformAdminDto {
+  id: string;
+  email: string;
+  fullName: string;
+  lastLoginAt: string | null;
+}
+
+export interface CompanySummaryDto {
+  id: string;
+  name: string;
+  slug: string;
+  phone: string | null;
+  status: CompanyStatus;
+  defaultLanguage: Language;
+  createdAt: string;
+  users: number;
+  products: number;
+  conversations: number;
+  leads: number;
+  qualifiedLeads: number;
+  channelConnected: boolean;
+  lastActivityAt: string | null;
+}
+
+export interface CompanyDetailDto extends CompanySummaryDto {
+  staff: UserDto[];
+}
+
+export interface PlatformAuditDto {
+  id: string;
+  adminEmail: string | null;
+  action: string;
+  companyId: string | null;
+  createdAt: string;
+}

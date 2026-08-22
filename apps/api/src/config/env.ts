@@ -25,6 +25,8 @@ const envSchema = z.object({
     .string()
     .regex(/^[0-9a-fA-F]{64}$/, "ENCRYPTION_KEY должен быть 64 hex-символа (32 байта)"),
 
+  // Отдельный секрет: утечка токена арендатора не должна открывать платформу.
+  PLATFORM_JWT_SECRET: z.string().default(""),
   OPENAI_API_KEY: z.string().default(""),
   OPENAI_MODEL: z.string().default("gpt-4.1-mini"),
   AI_MAX_TOOL_ITERATIONS: z.coerce.number().int().min(1).max(10).default(5),
@@ -41,6 +43,7 @@ export type Env = z.infer<typeof envSchema> & {
   isProduction: boolean;
   isTest: boolean;
   aiEnabled: boolean;
+  platformEnabled: boolean;
   corsOrigins: string[];
 };
 
@@ -60,11 +63,21 @@ function buildEnv(source: NodeJS.ProcessEnv): Env {
     throw new Error("JWT_ACCESS_SECRET и JWT_REFRESH_SECRET должны различаться");
   }
 
+  const platformSecret = value.PLATFORM_JWT_SECRET.trim();
+  if (platformSecret.length > 0 && platformSecret.length < 32) {
+    throw new Error("PLATFORM_JWT_SECRET должен быть не короче 32 символов");
+  }
+  if (platformSecret.length > 0 && platformSecret === value.JWT_ACCESS_SECRET) {
+    throw new Error("PLATFORM_JWT_SECRET должен отличаться от JWT_ACCESS_SECRET");
+  }
+
   return {
     ...value,
     isProduction: value.NODE_ENV === "production",
     isTest: value.NODE_ENV === "test",
     aiEnabled: value.OPENAI_API_KEY.trim().length > 0,
+    // Пустой секрет = платформенная админка не смонтирована вовсе.
+    platformEnabled: value.PLATFORM_JWT_SECRET.trim().length >= 32,
     corsOrigins: value.WEB_ORIGIN.split(",")
       .map((origin) => origin.trim())
       .filter(Boolean),

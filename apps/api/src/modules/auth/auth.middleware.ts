@@ -1,5 +1,5 @@
 import type { NextFunction, Request, RequestHandler, Response } from "express";
-import type { UserRole } from "@ai-sales/shared";
+import { CompanyStatus, type UserRole } from "@ai-sales/shared";
 import { forbidden, unauthorized } from "../../core/errors.js";
 import { verifyAccessToken, type AuthContext } from "../../core/security/tokens.js";
 import type { Repositories } from "../../domain/repositories.js";
@@ -42,8 +42,14 @@ export function createAuthenticate(repos: Repositories): RequestHandler {
           next(forbidden("Учётная запись отключена"));
           return;
         }
-        req.auth = { userId: user.id, companyId: user.companyId, role: user.role };
-        next();
+        return repos.companies.findById(user.companyId).then((company) => {
+          if (!company || company.status === CompanyStatus.SUSPENDED) {
+            next(forbidden("Компания заблокирована. Обратитесь в поддержку."));
+            return;
+          }
+          req.auth = { userId: user.id, companyId: user.companyId, role: user.role };
+          next();
+        });
       })
       .catch(next);
   };

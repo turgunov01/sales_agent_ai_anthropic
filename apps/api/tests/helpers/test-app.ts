@@ -1,6 +1,7 @@
 import type { Express } from "express";
 import request from "supertest";
 import { createApp } from "../../src/app.js";
+import { hashPassword } from "../../src/core/security/password.js";
 import { createContainer, type AppContainer } from "../../src/container.js";
 import { InProcessQueue } from "../../src/core/queue/in-process-queue.js";
 import { FakeLlmClient } from "./fake-llm.js";
@@ -73,6 +74,40 @@ export async function registerCompany(
 
 export function auth(token: string): { Authorization: string } {
   return { Authorization: `Bearer ${token}` };
+}
+
+export const PLATFORM_PASSWORD = "Operator12345!";
+
+/** Оператора платформы заводит CLI, а не публичный маршрут — в тестах кладём напрямую. */
+export async function registerPlatformAdmin(
+  context: TestContext,
+  email = "ops@ai-sales.uz",
+): Promise<{ accessToken: string; refreshToken: string; adminId: string; email: string }> {
+  const admin = await context.store.platformAdmins.push({
+    id: context.store.id("padm"),
+    email,
+    passwordHash: await hashPassword(PLATFORM_PASSWORD),
+    fullName: "Оператор платформы",
+    isActive: true,
+    lastLoginAt: null,
+    createdAt: context.store.now(),
+  });
+  void admin;
+
+  const response = await request(context.app)
+    .post("/api/v1/platform/auth/login")
+    .send({ email, password: PLATFORM_PASSWORD });
+
+  if (response.status !== 200) {
+    throw new Error(`Вход оператора не удался: ${JSON.stringify(response.body)}`);
+  }
+
+  return {
+    accessToken: response.body.data.tokens.accessToken,
+    refreshToken: response.body.data.tokens.refreshToken,
+    adminId: response.body.data.admin.id,
+    email,
+  };
 }
 
 /** Подключает Telegram-канал и возвращает его вместе с секретом вебхука. */

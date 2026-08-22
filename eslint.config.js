@@ -37,7 +37,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ["**/tests/**/*.ts", "**/*.test.ts", "**/prisma/seed.ts"],
+    files: ["**/tests/**/*.ts", "**/*.test.ts", "**/prisma/seed.ts", "**/scripts/**/*.ts"],
     rules: {
       "no-console": "off",
       "@typescript-eslint/no-explicit-any": "off",

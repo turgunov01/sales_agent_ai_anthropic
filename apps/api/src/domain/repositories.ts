@@ -1,3 +1,4 @@
+import type { PlatformRepository } from "./platform.js";
 import type {
   ChannelType,
   ConversationStatus,
@@ -101,6 +102,8 @@ export interface SessionsRepository {
   findByHash(hash: string): Promise<SessionEntity | null>;
   revokeByHash(hash: string, at: Date): Promise<void>;
   revokeAllForUser(userId: string, at: Date): Promise<void>;
+  /** Блокировка компании обрывает сессии всех её сотрудников. */
+  revokeAllForCompany(companyId: string, at: Date): Promise<void>;
   deleteExpired(before: Date): Promise<number>;
 }
 
@@ -340,6 +343,7 @@ export interface LeadsRepository {
 // ─────────────────────────────── Композиция ─────────────────────────────────
 
 export interface Repositories {
+  platform: PlatformRepository;
   companies: CompaniesRepository;
   users: UsersRepository;
   sessions: SessionsRepository;

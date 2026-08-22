@@ -1,5 +1,6 @@
 import {
   ChannelType,
+  CompanyStatus,
   ConversationStatus,
   Language,
   MessageRole,
@@ -132,6 +133,10 @@ export class TelegramDispatcher implements OutboundDelivery {
 
     const company = await this.repos.companies.findById(channel.companyId);
     if (!company) return;
+    if (company.status !== CompanyStatus.ACTIVE) {
+      logger.warn({ companyId: company.id }, "Компания заблокирована — бот не отвечает");
+      return;
+    }
 
     const externalId = String(message.from.id);
     const chatId = String(message.chat.id);

@@ -22,6 +22,10 @@ import {
 } from "./modules/conversations/conversations.service.js";
 import { EmployeesService } from "./modules/employees/employees.service.js";
 import { LeadsService } from "./modules/leads/leads.service.js";
+import {
+  createPlatformAuthenticate,
+} from "./modules/platform/platform.middleware.js";
+import { PlatformService } from "./modules/platform/platform.service.js";
 import { ProductsService } from "./modules/products/products.service.js";
 
 export interface AppServices {
@@ -33,6 +37,7 @@ export interface AppServices {
   conversations: ConversationsService;
   channels: ChannelsService;
   analytics: AnalyticsService;
+  platform: PlatformService;
   agent: AiAgentService;
   dispatcher: TelegramDispatcher;
 }
@@ -42,6 +47,7 @@ export interface AppContainer {
   services: AppServices;
   queue: InProcessQueue;
   authenticate: RequestHandler;
+  platformAuthenticate: RequestHandler;
 }
 
 export interface ContainerOverrides {
@@ -75,6 +81,7 @@ export function createContainer(overrides: ContainerOverrides = {}): AppContaine
   const products = new ProductsService(repos);
   const leads = new LeadsService(repos, now);
   const analytics = new AnalyticsService(repos, now);
+  const platform = new PlatformService(repos, now);
 
   // Диспетчер канала и сервис диалогов ссылаются друг на друга:
   // диалоги отправляют исходящие через канал, канал сохраняет сообщения в диалог.
@@ -107,6 +114,7 @@ export function createContainer(overrides: ContainerOverrides = {}): AppContaine
     repos,
     queue,
     authenticate: createAuthenticate(repos),
+    platformAuthenticate: createPlatformAuthenticate(repos),
     services: {
       auth,
       employees,
@@ -116,6 +124,7 @@ export function createContainer(overrides: ContainerOverrides = {}): AppContaine
       conversations,
       channels,
       analytics,
+      platform,
       agent,
       dispatcher,
     },

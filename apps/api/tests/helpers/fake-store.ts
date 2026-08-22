@@ -48,6 +48,14 @@ import type {
   SessionsRepository,
   UsersRepository,
 } from "../../src/domain/repositories.js";
+import type {
+  CompanyListQuery,
+  CompanySummary,
+  PlatformAdminEntity,
+  PlatformAuditEntry,
+  PlatformRepository,
+  PlatformSessionEntity,
+} from "../../src/domain/platform.js";
 import { matchesAttributes } from "../../src/infra/prisma/products.repository.js";
 
 /**
@@ -69,6 +77,9 @@ export class FakeStore {
   messages: MessageEntity[] = [];
   leads: LeadEntity[] = [];
   leadEvents: LeadEventEntity[] = [];
+  platformAdmins: PlatformAdminEntity[] = [];
+  platformSessions: PlatformSessionEntity[] = [];
+  platformAudit: PlatformAuditEntry[] = [];
 
   private counter = 0;
   private clock = new Date("2026-08-22T09:00:00.000Z").getTime();
@@ -290,6 +301,15 @@ class FakeSessionsRepository implements SessionsRepository {
   async revokeAllForUser(userId: string, at: Date): Promise<void> {
     for (const session of this.store.sessions) {
       if (session.userId === userId && !session.revokedAt) session.revokedAt = at;
+    }
+  }
+
+  async revokeAllForCompany(companyId: string, at: Date): Promise<void> {
+    const userIds = new Set(
+      this.store.users.filter((user) => user.companyId === companyId).map((user) => user.id),
+    );
+    for (const session of this.store.sessions) {
+      if (userIds.has(session.userId) && !session.revokedAt) session.revokedAt = at;
     }
   }
 
@@ -965,8 +985,171 @@ class FakeLeadsRepository implements LeadsRepository {
   }
 }
 
+
+class FakePlatformRepository implements PlatformRepository {
+  constructor(private readonly store: FakeStore) {}
+
+  async findAdminByEmail(email: string): Promise<PlatformAdminEntity | null> {
+    const found = this.store.platformAdmins.find((a) => a.email === email.toLowerCase());
+    return found ? clone(found) : null;
+  }
+
+  async findAdminById(adminId: string): Promise<PlatformAdminEntity | null> {
+    const found = this.store.platformAdmins.find((a) => a.id === adminId);
+    return found ? clone(found) : null;
+  }
+
+  async countAdmins(): Promise<number> {
+    return this.store.platformAdmins.length;
+  }
+
+  async createAdmin(input: {
+    email: string;
+    passwordHash: string;
+    fullName: string;
+  }): Promise<PlatformAdminEntity> {
+    const admin: PlatformAdminEntity = {
+      id: this.store.id("padm"),
+      email: input.email.toLowerCase(),
+      passwordHash: input.passwordHash,
+      fullName: input.fullName,
+      isActive: true,
+      lastLoginAt: null,
+      createdAt: this.store.now(),
+    };
+    this.store.platformAdmins.push(admin);
+    return clone(admin);
+  }
+
+  async touchAdminLogin(adminId: string, at: Date): Promise<void> {
+    const admin = this.store.platformAdmins.find((a) => a.id === adminId);
+    if (admin) admin.lastLoginAt = at;
+  }
+
+  async createSession(input: {
+    adminId: string;
+    refreshTokenHash: string;
+    userAgent: string | null;
+    ip: string | null;
+    expiresAt: Date;
+  }): Promise<PlatformSessionEntity> {
+    const session: PlatformSessionEntity = {
+      id: this.store.id("pses"),
+      adminId: input.adminId,
+      refreshTokenHash: input.refreshTokenHash,
+      expiresAt: input.expiresAt,
+      revokedAt: null,
+    };
+    this.store.platformSessions.push(session);
+    return clone(session);
+  }
+
+  async findSessionByHash(hash: string): Promise<PlatformSessionEntity | null> {
+    const found = this.store.platformSessions.find((s) => s.refreshTokenHash === hash);
+    return found ? clone(found) : null;
+  }
+
+  async revokeSessionByHash(hash: string, at: Date): Promise<void> {
+    const session = this.store.platformSessions.find((s) => s.refreshTokenHash === hash);
+    if (session && !session.revokedAt) session.revokedAt = at;
+  }
+
+  async revokeAllSessions(adminId: string, at: Date): Promise<void> {
+    for (const session of this.store.platformSessions) {
+      if (session.adminId === adminId && !session.revokedAt) session.revokedAt = at;
+    }
+  }
+
+  async listCompanies(query: CompanyListQuery): Promise<Paged<CompanySummary>> {
+    let items = [...this.store.companies];
+    if (query.status) items = items.filter((company) => company.status === query.status);
+    if (query.search) {
+      const search = query.search.toLowerCase();
+      items = items.filter(
+        (company) =>
+          company.name.toLowerCase().includes(search) ||
+          company.slug.toLowerCase().includes(search),
+      );
+    }
+    items.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+
+    const start = (query.page - 1) * query.limit;
+    const summaries = items
+      .slice(start, start + query.limit)
+      .map((company) => this.summarize(company.id))
+      .filter((summary): summary is CompanySummary => summary !== null);
+    return { items: summaries, total: items.length };
+  }
+
+  async getCompany(companyId: string): Promise<CompanySummary | null> {
+    return this.summarize(companyId);
+  }
+
+  async listCompanyUsers(companyId: string): Promise<UserEntity[]> {
+    return this.store.users.filter((user) => user.companyId === companyId).map(clone);
+  }
+
+  async setCompanyStatus(
+    companyId: string,
+    status: CompanyEntity["status"],
+  ): Promise<CompanyEntity | null> {
+    const company = this.store.companies.find((entry) => entry.id === companyId);
+    if (!company) return null;
+    company.status = status;
+    return clone(company);
+  }
+
+  async addAuditEntry(input: {
+    adminId: string;
+    action: string;
+    companyId: string | null;
+    details: unknown;
+    ip: string | null;
+  }): Promise<void> {
+    const admin = this.store.platformAdmins.find((a) => a.id === input.adminId);
+    this.store.platformAudit.push({
+      id: this.store.id("paud"),
+      adminId: input.adminId,
+      adminEmail: admin?.email ?? null,
+      action: input.action,
+      companyId: input.companyId,
+      details: input.details,
+      createdAt: this.store.now(),
+    });
+  }
+
+  async listAuditEntries(limit: number): Promise<PlatformAuditEntry[]> {
+    return [...this.store.platformAudit]
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+      .slice(0, limit)
+      .map(clone);
+  }
+
+  private summarize(companyId: string): CompanySummary | null {
+    const company = this.store.companies.find((entry) => entry.id === companyId);
+    if (!company) return null;
+
+    const conversations = this.store.conversations.filter((c) => c.companyId === companyId);
+    const leads = this.store.leads.filter((l) => l.companyId === companyId);
+    const lastActivity = conversations
+      .map((c) => c.lastMessageAt.getTime())
+      .sort((a, b) => b - a)[0];
+
+    return {
+      company: clone(company),
+      users: this.store.users.filter((u) => u.companyId === companyId).length,
+      products: this.store.products.filter((p) => p.companyId === companyId).length,
+      conversations: conversations.length,
+      leads: leads.length,
+      qualifiedLeads: leads.filter((l) => l.status === "QUALIFIED" || l.status === "WON").length,
+      channelConnected: this.store.channels.some((c) => c.companyId === companyId && c.isActive),
+      lastActivityAt: lastActivity ? new Date(lastActivity) : null,
+    };
+  }
+}
 export function createFakeRepositories(store: FakeStore): Repositories {
   return {
+    platform: new FakePlatformRepository(store),
     companies: new FakeCompaniesRepository(store),
     users: new FakeUsersRepository(store),
     sessions: new FakeSessionsRepository(store),

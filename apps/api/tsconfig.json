@@ -5,5 +5,5 @@
     "outDir": "dist",
     "types": ["node"]
   },
-  "include": ["src/**/*.ts", "tests/**/*.ts", "prisma/**/*.ts", "vitest.config.ts"]
+  "include": ["src/**/*.ts", "tests/**/*.ts", "prisma/**/*.ts", "scripts/**/*.ts", "vitest.config.ts"]
 }

@@ -1,4 +1,10 @@
-import type { AuthResultDto, AuthTokensDto, CompanyDto, UserDto } from "@ai-sales/shared";
+import {
+  CompanyStatus,
+  type AuthResultDto,
+  type AuthTokensDto,
+  type CompanyDto,
+  type UserDto,
+} from "@ai-sales/shared";
 import { env } from "../../config/env.js";
 import { conflict, forbidden, notFound, unauthorized } from "../../core/errors.js";
 import { hashPassword, verifyPassword } from "../../core/security/password.js";
@@ -62,6 +68,9 @@ export class AuthService {
 
     const company = await this.repos.companies.findById(user.companyId);
     if (!company) throw notFound("Компания не найдена");
+    if (company.status === CompanyStatus.SUSPENDED) {
+      throw forbidden("Компания заблокирована. Обратитесь в поддержку.");
+    }
 
     const at = this.now();
     await this.repos.users.touchLastLogin(user.companyId, user.id, at);
@@ -112,6 +121,11 @@ export class AuthService {
     // Сессия знает только userId; компанию берём из самой записи пользователя.
     const user = await this.repos.users.findByIdUnscoped(userId);
     if (!user || !user.isActive) throw unauthorized("Учётная запись недоступна");
+
+    const company = await this.repos.companies.findById(user.companyId);
+    if (!company || company.status === CompanyStatus.SUSPENDED) {
+      throw forbidden("Компания заблокирована. Обратитесь в поддержку.");
+    }
     return user;
   }
 
