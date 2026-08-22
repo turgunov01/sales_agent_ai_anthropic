@@ -43,7 +43,7 @@ ai_manager_sass/
 │  │  │     ├─ ai/
 │  │  │     │  ├─ agent.service.ts  # цикл tool-use
 │  │  │     │  ├─ prompt.builder.ts # сборка system prompt
-│  │  │     │  ├─ llm.client.ts     # порт модели + клиент Anthropic
+│  │  │     │  ├─ llm.client.ts     # порт модели (LlmClient)
 │  │  │     │  ├─ language.ts       # определение RU/UZ
 │  │  │     │  └─ tools/            # definitions.ts, executor.ts
 │  │  │     └─ channels/

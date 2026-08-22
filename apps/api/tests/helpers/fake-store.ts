@@ -163,7 +163,7 @@ class FakeCompaniesRepository implements CompaniesRepository {
       greeting: null,
       systemInstructions: null,
       autoCreateLead: true,
-      model: "claude-sonnet-5",
+      model: "gpt-4.1-mini",
       temperature: 0.3,
       maxTokens: 1024,
     });
@@ -533,7 +533,7 @@ class FakeKnowledgeRepository implements KnowledgeRepository {
         greeting: null,
         systemInstructions: null,
         autoCreateLead: true,
-        model: "claude-sonnet-5",
+        model: "gpt-4.1-mini",
         temperature: 0.3,
         maxTokens: 1024,
         ...data,

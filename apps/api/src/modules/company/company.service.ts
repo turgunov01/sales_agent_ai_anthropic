@@ -26,7 +26,7 @@ export const DEFAULT_AI_SETTINGS: Omit<AiSettingsEntity, "companyId"> = {
   greeting: null,
   systemInstructions: null,
   autoCreateLead: true,
-  model: env.AI_MODEL,
+  model: env.OPENAI_MODEL,
   temperature: 0.3,
   maxTokens: 1024,
 };

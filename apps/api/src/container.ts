@@ -5,11 +5,7 @@ import { InProcessQueue, backgroundQueue } from "./core/queue/in-process-queue.j
 import type { Repositories } from "./domain/repositories.js";
 import { createPrismaRepositories } from "./infra/prisma/index.js";
 import { AiAgentService } from "./modules/ai/agent.service.js";
-import {
-  AnthropicLlmClient,
-  DisabledLlmClient,
-  type LlmClient,
-} from "./modules/ai/llm.client.js";
+import { DisabledLlmClient, type LlmClient } from "./modules/ai/llm.client.js";
 import { OpenAiLlmClient } from "./modules/ai/openai.client.js";
 import { ToolExecutor } from "./modules/ai/tools/executor.js";
 import { AnalyticsService } from "./modules/analytics/analytics.service.js";
@@ -56,12 +52,10 @@ export interface ContainerOverrides {
   now?: () => Date;
 }
 
-/** Клиент модели по выбранному провайдеру; без ключа — честная деградация. */
+/** Без ключа — честная деградация вместо падения. */
 function createLlmClient(): LlmClient {
   if (!env.aiEnabled) return new DisabledLlmClient();
-  return env.AI_PROVIDER === "openai"
-    ? new OpenAiLlmClient(env.OPENAI_API_KEY, env.OPENAI_MODEL, env.AI_REQUEST_TIMEOUT_MS)
-    : new AnthropicLlmClient(env.ANTHROPIC_API_KEY);
+  return new OpenAiLlmClient(env.OPENAI_API_KEY, env.OPENAI_MODEL, env.AI_REQUEST_TIMEOUT_MS);
 }
 
 /**

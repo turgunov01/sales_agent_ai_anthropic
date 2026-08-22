@@ -21,7 +21,7 @@ const settings: AiSettingsEntity = {
   greeting: null,
   systemInstructions: "Всегда предлагай замер бесплатно.",
   autoCreateLead: true,
-  model: "claude-sonnet-5",
+  model: "gpt-4.1-mini",
   temperature: 0.3,
   maxTokens: 1024,
 };

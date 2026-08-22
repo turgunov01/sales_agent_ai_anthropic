@@ -28,7 +28,7 @@
    ┌───────────────────────────────────────────────────────────────────┐
    │                        API (Express, modular monolith)            │
    │                                                                   │
-   │  channels/telegram ──▶ conversations ──▶ ai/agent ──▶ Claude API  │
+   │  channels/telegram ──▶ conversations ──▶ ai/agent ──▶ OpenAI API  │
    │        │                    │               │                     │
    │        │                    │               ├─ tools ─┬─ products │
    │        │                    │               │         ├─ leads    │
@@ -78,7 +78,7 @@
 1. `PromptBuilder` собирает system prompt: профиль компании + база знаний + FAQ +
    инструкции + правила анти-галлюцинаций + состояние лида.
 2. История диалога загружается окном (последние N сообщений + сжатая сводка).
-3. Claude вызывается с набором tools; исполнение tools — в `ToolExecutor`,
+3. Модель вызывается с набором tools; исполнение tools — в `ToolExecutor`,
    который принудительно подставляет `companyId` из контекста запроса.
 4. Цикл tool-use ограничен `AI_MAX_TOOL_ITERATIONS` (по умолчанию 5).
 5. Побочные эффекты (создание лида, передача менеджеру, запрос контакта)
@@ -100,7 +100,7 @@ Nuxt SPA → `Bearer <access token>` → REST API. Компания опреде
 | Аутентификация | JWT access (15 мин) + refresh (30 дней, хэш в БД) | Stateless API, отзывные сессии |
 | Пароли | scrypt (Node crypto) | Memory-hard, без нативных сборок |
 | Секреты каналов | AES-256-GCM в БД | Токен бота — доступ к переписке клиента |
-| AI | Claude + tool calling | Инструменты дают фактическую заземлённость |
+| AI | OpenAI + function calling | Инструменты дают фактическую заземлённость |
 | Фон | in-process очередь | Нет Redis в MVP; интерфейс готов к замене |
 
 ## 1.6. Что осознанно НЕ входит в MVP

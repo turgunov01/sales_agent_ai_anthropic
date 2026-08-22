@@ -5,7 +5,7 @@ Multi-tenant SaaS: AI-ассистент продаёт от имени бизн
 контакт и передаёт сделку менеджеру. Первый рынок — мебельные магазины Ташкента.
 
 ```
-Клиент в Telegram  →  webhook  →  AI-агент (Claude + tools)  →  каталог и база знаний компании
+Клиент в Telegram  →  webhook  →  AI-агент (OpenAI + tools)  →  каталог и база знаний компании
                                         ↓
                               лид в CRM  →  менеджер в админке
 ```
@@ -30,7 +30,7 @@ Multi-tenant SaaS: AI-ассистент продаёт от имени бизн
 
 **Backend** — Node.js 22, Express, TypeScript, PostgreSQL, Prisma, JWT, Zod
 **Frontend** — Nuxt 4, Vue 3, TypeScript, Pinia, Tailwind CSS 4
-**AI** — Claude API (tool calling), отдельный контекст для каждой компании
+**AI** — OpenAI API (function calling), отдельный контекст для каждой компании
 **Инфраструктура** — Docker, Nginx, PM2, Ubuntu VPS
 
 ## Быстрый старт

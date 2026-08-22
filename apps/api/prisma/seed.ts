@@ -231,7 +231,7 @@ async function main(): Promise<void> {
       tone: "Тёплый, вежливый, без навязчивости",
       systemInstructions:
         "Предлагай бесплатный замер. Если клиент сомневается — приглашай в шоурум. Не обещай скидок.",
-      model: "claude-sonnet-5",
+      model: "gpt-4.1-mini",
     },
     update: {},
   });

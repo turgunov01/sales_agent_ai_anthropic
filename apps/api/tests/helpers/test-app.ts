@@ -16,7 +16,7 @@ export interface TestContext {
   queue: InProcessQueue;
 }
 
-/** Полное приложение с фейковыми внешними зависимостями: БД, Claude, Telegram. */
+/** Полное приложение с фейковыми внешними зависимостями: БД, модель, Telegram. */
 export function createTestContext(): TestContext {
   const store = new FakeStore();
   const llm = new FakeLlmClient();

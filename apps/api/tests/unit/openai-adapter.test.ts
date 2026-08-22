@@ -139,9 +139,10 @@ describe("разбор ответа OpenAI", () => {
 });
 
 describe("выбор модели", () => {
-  it("подменяет модель чужого провайдера", () => {
+  it("подменяет модель, оставшуюся от прежнего провайдера", () => {
     expect(resolveModel("claude-sonnet-5", "gpt-4.1-mini")).toBe("gpt-4.1-mini");
     expect(resolveModel("", "gpt-4.1-mini")).toBe("gpt-4.1-mini");
+    expect(resolveModel("  ", "gpt-4.1-mini")).toBe("gpt-4.1-mini");
   });
 
   it("уважает явно заданную модель OpenAI", () => {

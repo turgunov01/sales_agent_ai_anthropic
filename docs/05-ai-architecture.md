@@ -20,8 +20,8 @@ AiAgentService.reply(ctx, userMessage)
    │
    ├─ LanguageDetector       → RU | UZ (детерминированно, по алфавиту и маркерам)
    ├─ PromptBuilder          → system prompt из данных компании
-   ├─ ConversationHistory    → последние N сообщений в формате Claude
-   ├─ ClaudeClient           → messages.create с tools
+   ├─ ConversationHistory    → последние N сообщений в формате порта
+   ├─ OpenAiLlmClient        → chat/completions с tools
    ├─ ToolExecutor           → исполняет tool_use, подставляя companyId
    └─ AgentResult            → { text, effects[], usage }
 ```
@@ -84,7 +84,7 @@ AiAgentService.reply(ctx, userMessage)
 ```
 messages = [history..., {role: user, content: "Мне нужен диван до 8 млн"}]
 loop (max 5):
-    response = claude.messages.create({system, messages, tools})
+    response = llm.complete({system, messages, tools})
     if response.stop_reason != "tool_use": break
     for each tool_use block:
         result = ToolExecutor.execute(name, input, ctx)
@@ -115,7 +115,7 @@ return text из последнего ответа + накопленные effe
 | Сбой | Поведение |
 |---|---|
 | Нет `ANTHROPIC_API_KEY` | Агент выключен, клиенту — сообщение о том, что менеджер ответит; создаётся `HANDOFF_REQUESTED` |
-| Таймаут/5xx Claude | Одна повторная попытка, затем вежливое сообщение + передача менеджеру |
+| Таймаут/5xx модели | Одна повторная попытка, затем вежливое сообщение + передача менеджеру |
 | Превышен лимит итераций | Возвращается последний текст; в лог — предупреждение |
 | Ошибка инструмента | Модель получает `{"error": "..."}` и продолжает диалог |
 | `AiSettings.enabled = false` | Сообщения сохраняются, ответ не генерируется |

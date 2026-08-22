@@ -31,6 +31,12 @@ export function createWebhookRouter(
 
       const channel = await repos.channels.findByIdUnscoped(channelId);
       if (!channel || !channel.isActive) {
+        // Наружу — всё равно 200, чтобы не подтверждать существование канала,
+        // но в лог пишем: молчащий бот иначе выглядит как исправный.
+        logger.warn(
+          { channelId, reason: channel ? "канал отключён" : "канал не найден" },
+          "Апдейт Telegram отброшен",
+        );
         res.status(200).json({ ok: true });
         return;
       }

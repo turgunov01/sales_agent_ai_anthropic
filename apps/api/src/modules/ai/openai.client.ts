@@ -11,12 +11,12 @@ import {
 } from "./llm.client.js";
 
 /**
- * Адаптер OpenAI Chat Completions под тот же порт LlmClient, что и Claude.
+ * Адаптер OpenAI Chat Completions под порт LlmClient.
  * Различия форматов живут только здесь: агент, инструменты и тесты не меняются.
  *
  * Ключевые расхождения, которые переводит адаптер:
- *   Anthropic tool_use  -> OpenAI tool_calls внутри assistant-сообщения
- *   Anthropic tool_result (в user-сообщении) -> отдельные сообщения role: "tool"
+ *   tool_use    -> OpenAI tool_calls внутри assistant-сообщения
+ *   tool_result (внутри user-сообщения) -> отдельные сообщения role: "tool"
  *   input_schema -> function.parameters
  */
 
@@ -55,7 +55,7 @@ export function toOpenAiTools(tools: LlmToolDefinition[]): Array<Record<string, 
   }));
 }
 
-/** История в формате Anthropic -> история в формате OpenAI. */
+/** История в формате порта -> история в формате OpenAI. */
 export function toOpenAiMessages(system: string, messages: LlmRequest["messages"]): OpenAiMessage[] {
   const result: OpenAiMessage[] = [{ role: "system", content: system }];
 
@@ -137,10 +137,11 @@ export function fromOpenAiResponse(payload: OpenAiResponse): LlmResponse {
   };
 }
 
-/** Модель, сохранённая для другого провайдера, не должна ломать запрос. */
+/** Модель из старых записей БД не должна ломать запрос. */
 export function resolveModel(requested: string, fallback: string): string {
-  const belongsToOtherProvider = /^claude/i.test(requested.trim());
-  return belongsToOtherProvider || requested.trim().length === 0 ? fallback : requested;
+  const model = requested.trim();
+  const isOpenAiModel = /^(gpt|o\d|chatgpt)/i.test(model);
+  return isOpenAiModel ? model : fallback;
 }
 
 export class OpenAiLlmClient implements LlmClient {

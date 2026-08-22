@@ -269,7 +269,7 @@ describe("сценарий «Мне нужен диван до 8 млн»", () =
 
 describe("отказоустойчивость и ручной режим", () => {
   it("при недоступной модели отвечает честно и зовёт менеджера", async () => {
-    context.llm.failWith(new Error("Claude недоступен"));
+    context.llm.failWith(new Error("модель недоступна"));
 
     await sendTelegramUpdate(
       context,

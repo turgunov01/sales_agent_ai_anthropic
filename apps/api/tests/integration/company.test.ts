@@ -237,6 +237,22 @@ describe("каналы", () => {
     expect(context.telegram.calls.map((call) => call.method)).toContain("deleteWebhook");
   });
 
+  it("не гасит рабочий канал, если переподключение сорвалось", async () => {
+    const channel = await connectTelegram(context, owner.accessToken);
+    context.telegram.failSetWebhook = true;
+
+    const response = await request(context.app)
+      .post("/api/v1/channels/telegram")
+      .set(auth(owner.accessToken))
+      .send({ botToken: channel.botToken });
+
+    expect(response.status).toBe(502);
+    // Прежняя рабочая привязка сохранена: клиенты продолжают писать боту.
+    const stored = context.store.channels.find((entry) => entry.id === channel.channelId);
+    expect(stored?.isActive).toBe(true);
+    expect(stored?.botExternalId).toBe("987654321");
+  });
+
   it("гасит канал, если Telegram отклонил webhook", async () => {
     context.telegram.failSetWebhook = true;
 
