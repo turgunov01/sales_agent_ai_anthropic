@@ -193,6 +193,8 @@ export interface ChannelsRepository {
   /** Вебхук приходит без контекста компании: канал сам определяет арендатора. */
   findByIdUnscoped(channelId: string): Promise<ChannelEntity | null>;
   findByType(companyId: string, type: ChannelType): Promise<ChannelEntity | null>;
+  /** Один бот принадлежит одной компании: проверка владельца до привязки. */
+  findByBotExternalId(botExternalId: string): Promise<ChannelEntity | null>;
   upsertByType(companyId: string, input: ChannelWriteInput): Promise<ChannelEntity>;
   deactivate(companyId: string, channelId: string): Promise<boolean>;
 }

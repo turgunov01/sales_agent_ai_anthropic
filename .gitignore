@@ -14,4 +14,3 @@ Thumbs.db
 prisma/dev.db
 uploads/
 .pgdata/
-deploy.log

@@ -223,7 +223,7 @@ model AiSettings {
   greeting           String?
   systemInstructions String?
   autoCreateLead     Boolean  @default(true)
-  model              String   @default("claude-sonnet-5")
+  model              String   @default("gpt-4.1-mini")
   temperature        Float    @default(0.3)
   maxTokens          Int      @default(1024)
   updatedAt          DateTime @updatedAt
@@ -252,6 +252,8 @@ model Channel {
   conversations Conversation[]
 
   @@unique([companyId, type])
+  // Один Telegram-бот не может обслуживать две компании.
+  @@unique([botExternalId])
   @@index([companyId, isActive])
   @@map("channels")
 }

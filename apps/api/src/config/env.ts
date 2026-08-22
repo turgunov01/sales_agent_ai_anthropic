@@ -25,8 +25,12 @@ const envSchema = z.object({
     .string()
     .regex(/^[0-9a-fA-F]{64}$/, "ENCRYPTION_KEY должен быть 64 hex-символа (32 байта)"),
 
+  // Провайдер модели. Порт LlmClient одинаков для обоих.
+  AI_PROVIDER: z.enum(["openai", "anthropic"]).default("openai"),
   ANTHROPIC_API_KEY: z.string().default(""),
-  AI_MODEL: z.string().default("claude-sonnet-5"),
+  OPENAI_API_KEY: z.string().default(""),
+  OPENAI_MODEL: z.string().default("gpt-4.1-mini"),
+  AI_MODEL: z.string().default("gpt-4.1-mini"),
   AI_MAX_TOOL_ITERATIONS: z.coerce.number().int().min(1).max(10).default(5),
   AI_HISTORY_WINDOW: z.coerce.number().int().min(4).max(100).default(20),
   AI_REQUEST_TIMEOUT_MS: z.coerce.number().int().min(1000).max(120000).default(45000),
@@ -64,7 +68,10 @@ function buildEnv(source: NodeJS.ProcessEnv): Env {
     ...value,
     isProduction: value.NODE_ENV === "production",
     isTest: value.NODE_ENV === "test",
-    aiEnabled: value.ANTHROPIC_API_KEY.trim().length > 0,
+    aiEnabled:
+      value.AI_PROVIDER === "openai"
+        ? value.OPENAI_API_KEY.trim().length > 0
+        : value.ANTHROPIC_API_KEY.trim().length > 0,
     corsOrigins: value.WEB_ORIGIN.split(",")
       .map((origin) => origin.trim())
       .filter(Boolean),

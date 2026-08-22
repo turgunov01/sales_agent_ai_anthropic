@@ -10,6 +10,7 @@ import {
   DisabledLlmClient,
   type LlmClient,
 } from "./modules/ai/llm.client.js";
+import { OpenAiLlmClient } from "./modules/ai/openai.client.js";
 import { ToolExecutor } from "./modules/ai/tools/executor.js";
 import { AnalyticsService } from "./modules/analytics/analytics.service.js";
 import { createAuthenticate } from "./modules/auth/auth.middleware.js";
@@ -55,6 +56,14 @@ export interface ContainerOverrides {
   now?: () => Date;
 }
 
+/** Клиент модели по выбранному провайдеру; без ключа — честная деградация. */
+function createLlmClient(): LlmClient {
+  if (!env.aiEnabled) return new DisabledLlmClient();
+  return env.AI_PROVIDER === "openai"
+    ? new OpenAiLlmClient(env.OPENAI_API_KEY, env.OPENAI_MODEL, env.AI_REQUEST_TIMEOUT_MS)
+    : new AnthropicLlmClient(env.ANTHROPIC_API_KEY);
+}
+
 /**
  * Единая точка сборки зависимостей. Тесты подменяют репозитории,
  * клиент модели и транспорт Telegram, не трогая ни один сервис.
@@ -64,9 +73,7 @@ export function createContainer(overrides: ContainerOverrides = {}): AppContaine
   const queue = overrides.queue ?? backgroundQueue;
   const now = overrides.now ?? (() => new Date());
   const telegram = overrides.telegram ?? new HttpTelegramTransport();
-  const llm =
-    overrides.llm ??
-    (env.aiEnabled ? new AnthropicLlmClient(env.ANTHROPIC_API_KEY) : new DisabledLlmClient());
+  const llm = overrides.llm ?? createLlmClient();
 
   const auth = new AuthService(repos, now);
   const employees = new EmployeesService(repos);

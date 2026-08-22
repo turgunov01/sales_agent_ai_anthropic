@@ -572,6 +572,11 @@ class FakeChannelsRepository implements ChannelsRepository {
     return found ? clone(found) : null;
   }
 
+  async findByBotExternalId(botExternalId: string): Promise<ChannelEntity | null> {
+    const found = this.store.channels.find((c) => c.botExternalId === botExternalId);
+    return found ? clone(found) : null;
+  }
+
   async upsertByType(companyId: string, input: ChannelWriteInput): Promise<ChannelEntity> {
     let channel = this.store.channels.find(
       (entry) => entry.companyId === companyId && entry.type === input.type,
@@ -591,6 +596,7 @@ class FakeChannelsRepository implements ChannelsRepository {
     );
     if (!channel) return false;
     channel.isActive = false;
+    channel.botExternalId = null;
     return true;
   }
 }

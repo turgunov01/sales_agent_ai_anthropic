@@ -1,6 +1,6 @@
 import { ChannelType, type ChannelDto } from "@ai-sales/shared";
 import { env } from "../../config/env.js";
-import { channelError, notFound } from "../../core/errors.js";
+import { channelError, conflict, notFound } from "../../core/errors.js";
 import { logger } from "../../core/logger.js";
 import {
   decryptSecret,
@@ -37,6 +37,16 @@ export class ChannelsService {
   async connectTelegram(auth: AuthContext, botToken: string): Promise<ChannelDto> {
     const identity = await this.transport.getMe(botToken);
 
+    // Telegram допускает только один webhook на бота. Без этой проверки вторая
+    // компания, введя чужой токен, молча увела бы к себе клиентов первой.
+    const previous = await this.repos.channels.findByType(auth.companyId, ChannelType.TELEGRAM);
+    const owner = await this.repos.channels.findByBotExternalId(String(identity.id));
+    if (owner && owner.companyId !== auth.companyId) {
+      throw conflict(
+        "Этот бот уже подключён к другой компании. Создайте отдельного бота у @BotFather.",
+      );
+    }
+
     const channel = await this.repos.channels.upsertByType(auth.companyId, {
       type: ChannelType.TELEGRAM,
       botUsername: identity.username,
@@ -50,7 +60,21 @@ export class ChannelsService {
     try {
       await this.transport.setWebhook(botToken, buildWebhookUrl(channel.id), channel.webhookSecret);
     } catch (error) {
-      await this.repos.channels.deactivate(auth.companyId, channel.id);
+      // Откат: рабочий канал не должен падать из-за одной неудачной попытки
+      // переподключения. Гасим только то, что сами и создали.
+      if (previous) {
+        await this.repos.channels.upsertByType(auth.companyId, {
+          type: ChannelType.TELEGRAM,
+          botUsername: previous.botUsername,
+          botExternalId: previous.botExternalId,
+          botTokenCiphertext: previous.botTokenCiphertext,
+          webhookSecret: previous.webhookSecret,
+          isActive: previous.isActive,
+          lastConnectedAt: previous.lastConnectedAt,
+        });
+      } else {
+        await this.repos.channels.deactivate(auth.companyId, channel.id);
+      }
       logger.error({ err: error, companyId: auth.companyId }, "Не удалось установить webhook");
       throw channelError(
         "Telegram не принял webhook. Проверьте, что PUBLIC_WEBHOOK_URL доступен по HTTPS.",

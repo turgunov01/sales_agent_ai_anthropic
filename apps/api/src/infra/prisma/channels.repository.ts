@@ -35,6 +35,15 @@ export class PrismaChannelsRepository implements ChannelsRepository {
     return row ? mapChannel(row) : null;
   }
 
+  /**
+   * Поиск по всем компаниям — намеренно вне guard: мы как раз выясняем,
+   * не занят ли бот другим арендатором, и арендатор здесь ещё не определён.
+   */
+  async findByBotExternalId(botExternalId: string): Promise<ChannelEntity | null> {
+    const row = await this.raw.channel.findFirst({ where: { botExternalId } });
+    return row ? mapChannel(row) : null;
+  }
+
   async upsertByType(companyId: string, input: ChannelWriteInput): Promise<ChannelEntity> {
     const row = await this.db.channel.upsert({
       where: { companyId_type: { companyId, type: input.type } },
@@ -54,7 +63,7 @@ export class PrismaChannelsRepository implements ChannelsRepository {
   async deactivate(companyId: string, channelId: string): Promise<boolean> {
     const result = await this.db.channel.updateMany({
       where: { id: channelId, companyId },
-      data: { isActive: false },
+      data: { isActive: false, botExternalId: null },
     });
     return result.count > 0;
   }

@@ -1,7 +1,13 @@
 import request from "supertest";
 import { beforeEach, describe, expect, it } from "vitest";
 import { ChannelType, Language } from "@ai-sales/shared";
-import { auth, createTestContext, registerCompany, type TestContext } from "../helpers/test-app.js";
+import {
+  auth,
+  connectTelegram,
+  createTestContext,
+  registerCompany,
+  type TestContext,
+} from "../helpers/test-app.js";
 
 let context: TestContext;
 let alpha: Awaited<ReturnType<typeof registerCompany>>;
@@ -161,5 +167,57 @@ describe("изоляция арендаторов", () => {
 
     expect(alphaStats.body.data.products.total).toBe(1);
     expect(betaStats.body.data.products.total).toBe(0);
+  });
+});
+
+describe("захват чужого Telegram-бота", () => {
+  it("вторая компания не может подключить бота, уже занятого первой", async () => {
+    const channel = await connectTelegram(context, alpha.accessToken);
+    context.telegram.reset();
+
+    const response = await request(context.app)
+      .post("/api/v1/channels/telegram")
+      .set(auth(beta.accessToken))
+      .send({ botToken: channel.botToken });
+
+    expect(response.status).toBe(409);
+
+    // Канал первой компании остался рабочим...
+    const alphaChannel = context.store.channels.find(
+      (entry) => entry.companyId === alpha.companyId,
+    );
+    expect(alphaChannel?.isActive).toBe(true);
+    expect(alphaChannel?.id).toBe(channel.channelId);
+
+    // ...и вебхук на вторую компанию не переставлялся.
+    expect(context.telegram.calls.filter((call) => call.method === "setWebhook")).toHaveLength(0);
+    expect(context.store.channels.filter((entry) => entry.isActive)).toHaveLength(1);
+  });
+
+  it("после отключения бот освобождается для другой компании", async () => {
+    const channel = await connectTelegram(context, alpha.accessToken);
+
+    await request(context.app)
+      .delete(`/api/v1/channels/${channel.channelId}`)
+      .set(auth(alpha.accessToken));
+
+    const response = await request(context.app)
+      .post("/api/v1/channels/telegram")
+      .set(auth(beta.accessToken))
+      .send({ botToken: channel.botToken });
+
+    expect(response.status).toBe(201);
+  });
+
+  it("та же компания может переподключить своего бота", async () => {
+    const channel = await connectTelegram(context, alpha.accessToken);
+
+    const response = await request(context.app)
+      .post("/api/v1/channels/telegram")
+      .set(auth(alpha.accessToken))
+      .send({ botToken: channel.botToken });
+
+    expect(response.status).toBe(201);
+    expect(context.store.channels.filter((entry) => entry.companyId === alpha.companyId)).toHaveLength(1);
   });
 });
