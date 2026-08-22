@@ -1,0 +1,28 @@
+{
+  "name": "@ai-sales/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "preview": "nuxt preview",
+    "start": "node .output/server/index.mjs",
+    "typecheck": "nuxt typecheck",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@ai-sales/shared": "*"
+  },
+  "devDependencies": {
+    "@pinia/nuxt": "^0.9.0",
+    "@tailwindcss/vite": "^4.0.0",
+    "nuxt": "^4.0.0",
+    "pinia": "^2.3.0",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.7.2",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0",
+    "vue-tsc": "^3.3.11"
+  }
+}

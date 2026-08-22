@@ -1,0 +1,17 @@
+node_modules/
+dist/
+.output/
+.nuxt/
+.nitro/
+.cache/
+coverage/
+*.log
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db
+prisma/dev.db
+uploads/
+.pgdata/
+deploy.log

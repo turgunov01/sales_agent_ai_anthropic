@@ -1,0 +1,382 @@
+// AI Sales Manager — модель данных.
+// Все таблицы арендатора обязаны содержать companyId (см. docs/07-security-model.md).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────── Перечисления ───────────────────────────────
+
+enum UserRole {
+  OWNER
+  ADMIN
+  MANAGER
+}
+
+enum CompanyStatus {
+  ACTIVE
+  SUSPENDED
+}
+
+enum Language {
+  RU
+  UZ
+}
+
+enum Currency {
+  UZS
+  USD
+}
+
+enum StockStatus {
+  IN_STOCK
+  OUT_OF_STOCK
+  ON_ORDER
+}
+
+enum ChannelType {
+  TELEGRAM
+}
+
+enum ConversationStatus {
+  ACTIVE
+  HANDOFF_REQUESTED
+  HUMAN_HANDLING
+  CLOSED
+}
+
+enum MessageRole {
+  CUSTOMER
+  ASSISTANT
+  MANAGER
+  SYSTEM
+}
+
+enum MessageType {
+  TEXT
+  PHOTO
+  VOICE
+  DOCUMENT
+  SYSTEM_EVENT
+}
+
+enum LeadStatus {
+  NEW
+  QUALIFIED
+  CONTACTED
+  WON
+  LOST
+}
+
+enum LeadSource {
+  TELEGRAM
+  MANUAL
+}
+
+enum LeadEventType {
+  CREATED
+  STATUS_CHANGED
+  CONTACT_CAPTURED
+  ASSIGNED
+  NOTE_ADDED
+  HANDOFF_REQUESTED
+}
+
+// ──────────────────────────────── Арендатор ─────────────────────────────────
+
+model Company {
+  id              String        @id @default(cuid())
+  name            String
+  slug            String        @unique
+  phone           String?
+  status          CompanyStatus @default(ACTIVE)
+  defaultLanguage Language      @default(RU)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  users         User[]
+  products      Product[]
+  faqs          FaqItem[]
+  channels      Channel[]
+  customers     Customer[]
+  conversations Conversation[]
+  messages      Message[]
+  leads         Lead[]
+  leadEvents    LeadEvent[]
+  knowledge     KnowledgeBase?
+  aiSettings    AiSettings?
+
+  @@map("companies")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  companyId    String
+  email        String   @unique
+  passwordHash String
+  fullName     String
+  role         UserRole @default(MANAGER)
+  isActive     Boolean  @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  company              Company        @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  sessions             Session[]
+  assignedLeads        Lead[]         @relation("LeadAssignee")
+  assignedConversations Conversation[] @relation("ConversationAssignee")
+  leadEvents           LeadEvent[]
+
+  @@index([companyId, isActive])
+  @@map("users")
+}
+
+model Session {
+  id               String    @id @default(cuid())
+  userId           String
+  refreshTokenHash String    @unique
+  userAgent        String?
+  ip               String?
+  expiresAt        DateTime
+  revokedAt        DateTime?
+  createdAt        DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, expiresAt])
+  @@map("sessions")
+}
+
+// ───────────────────────────────── Каталог ──────────────────────────────────
+
+model Product {
+  id          String      @id @default(cuid())
+  companyId   String
+  externalId  String?
+  name        String
+  description String?
+  category    String?
+  price       Decimal     @db.Decimal(14, 2)
+  currency    Currency    @default(UZS)
+  images      String[]    @default([])
+  attributes  Json        @default("{}")
+  stockStatus StockStatus @default(IN_STOCK)
+  active      Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@unique([companyId, externalId])
+  @@index([companyId, active])
+  @@index([companyId, category])
+  @@index([companyId, price])
+  @@map("products")
+}
+
+// ─────────────────────────────── База знаний ────────────────────────────────
+
+model KnowledgeBase {
+  id                  String   @id @default(cuid())
+  companyId           String   @unique
+  about               String?
+  address             String?
+  workingHours        String?
+  delivery            String?
+  payment             String?
+  warranty            String?
+  managerInstructions String?
+  updatedAt           DateTime @updatedAt
+
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@map("knowledge_bases")
+}
+
+model FaqItem {
+  id        String   @id @default(cuid())
+  companyId String
+  question  String
+  answer    String
+  position  Int      @default(0)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([companyId, active, position])
+  @@map("faq_items")
+}
+
+model AiSettings {
+  id                 String   @id @default(cuid())
+  companyId          String   @unique
+  enabled            Boolean  @default(true)
+  assistantName      String   @default("Ассистент")
+  tone               String   @default("Дружелюбный, вежливый, по делу")
+  greeting           String?
+  systemInstructions String?
+  autoCreateLead     Boolean  @default(true)
+  model              String   @default("claude-sonnet-5")
+  temperature        Float    @default(0.3)
+  maxTokens          Int      @default(1024)
+  updatedAt          DateTime @updatedAt
+
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@map("ai_settings")
+}
+
+// ──────────────────────────────── Каналы ────────────────────────────────────
+
+model Channel {
+  id                  String      @id @default(cuid())
+  companyId           String
+  type                ChannelType @default(TELEGRAM)
+  isActive            Boolean     @default(true)
+  botUsername         String?
+  botExternalId       String?
+  botTokenCiphertext  String
+  webhookSecret       String
+  lastConnectedAt     DateTime?
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+
+  company       Company        @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  conversations Conversation[]
+
+  @@unique([companyId, type])
+  @@index([companyId, isActive])
+  @@map("channels")
+}
+
+// ─────────────────────────── Клиенты и диалоги ──────────────────────────────
+
+model Customer {
+  id          String      @id @default(cuid())
+  companyId   String
+  channelType ChannelType @default(TELEGRAM)
+  externalId  String
+  firstName   String?
+  lastName    String?
+  username    String?
+  phone       String?
+  language    Language    @default(RU)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  company       Company        @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  conversations Conversation[]
+  leads         Lead[]
+
+  @@unique([companyId, channelType, externalId])
+  @@index([companyId, createdAt])
+  @@map("customers")
+}
+
+model Conversation {
+  id             String             @id @default(cuid())
+  companyId      String
+  customerId     String
+  channelId      String
+  status         ConversationStatus @default(ACTIVE)
+  language       Language           @default(RU)
+  assignedUserId String?
+  handoffReason  String?
+  lastMessageAt  DateTime           @default(now())
+  createdAt      DateTime           @default(now())
+  closedAt       DateTime?
+
+  company  Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  customer Customer  @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  channel  Channel   @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  assignee User?     @relation("ConversationAssignee", fields: [assignedUserId], references: [id], onDelete: SetNull)
+  messages Message[]
+  leads    Lead[]
+
+  @@index([companyId, status, lastMessageAt])
+  @@index([companyId, customerId])
+  @@map("conversations")
+}
+
+model Message {
+  id             String      @id @default(cuid())
+  companyId      String
+  conversationId String
+  role           MessageRole
+  type           MessageType @default(TEXT)
+  content        String
+  attachments    Json?
+  toolCalls      Json?
+  tokensIn       Int?
+  tokensOut      Int?
+  createdAt      DateTime    @default(now())
+
+  company      Company      @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId, createdAt])
+  @@index([companyId, createdAt])
+  @@map("messages")
+}
+
+// ───────────────────────────────── CRM ──────────────────────────────────────
+
+model Lead {
+  id                   String     @id @default(cuid())
+  companyId            String
+  customerId           String
+  conversationId       String?
+  name                 String?
+  phone                String?
+  telegramUserId       String?
+  source               LeadSource @default(TELEGRAM)
+  interest             String?
+  budgetMin            Decimal?   @db.Decimal(14, 2)
+  budgetMax            Decimal?   @db.Decimal(14, 2)
+  currency             Currency   @default(UZS)
+  status               LeadStatus @default(NEW)
+  aiSummary            String?
+  qualificationScore   Int        @default(0)
+  interestedProductIds String[]   @default([])
+  assignedManagerId    String?
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime   @updatedAt
+  contactedAt          DateTime?
+  closedAt             DateTime?
+
+  company      Company       @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  customer     Customer      @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  conversation Conversation? @relation(fields: [conversationId], references: [id], onDelete: SetNull)
+  assignee     User?         @relation("LeadAssignee", fields: [assignedManagerId], references: [id], onDelete: SetNull)
+  events       LeadEvent[]
+
+  @@index([companyId, status, createdAt])
+  @@index([companyId, assignedManagerId])
+  @@map("leads")
+}
+
+model LeadEvent {
+  id          String        @id @default(cuid())
+  companyId   String
+  leadId      String
+  type        LeadEventType
+  fromStatus  LeadStatus?
+  toStatus    LeadStatus?
+  comment     String?
+  actorUserId String?
+  createdAt   DateTime      @default(now())
+
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  lead    Lead    @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  actor   User?   @relation(fields: [actorUserId], references: [id], onDelete: SetNull)
+
+  @@index([companyId, leadId, createdAt])
+  @@map("lead_events")
+}
