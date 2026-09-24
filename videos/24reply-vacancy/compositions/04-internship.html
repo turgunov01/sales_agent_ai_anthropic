@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <style>
+        @font-face{font-family:'Plex24';font-weight:400;font-style:normal;font-display:block;src:url('assets/fonts/IBMPlexMono-400-cyrillic.woff2') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+        @font-face{font-family:'Plex24';font-weight:400;font-style:normal;font-display:block;src:url('assets/fonts/IBMPlexMono-400-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+        @font-face{font-family:'Plex24';font-weight:700;font-style:normal;font-display:block;src:url('assets/fonts/IBMPlexMono-700-cyrillic.woff2') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+        @font-face{font-family:'Plex24';font-weight:700;font-style:normal;font-display:block;src:url('assets/fonts/IBMPlexMono-700-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+        @font-face{font-family:'Inter24';font-weight:400;font-style:normal;font-display:block;src:url('assets/fonts/Inter-400-cyrillic.woff2') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+        @font-face{font-family:'Inter24';font-weight:400;font-style:normal;font-display:block;src:url('assets/fonts/Inter-400-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+        @font-face{font-family:'Inter24';font-weight:500;font-style:normal;font-display:block;src:url('assets/fonts/Inter-500-cyrillic.woff2') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+        @font-face{font-family:'Inter24';font-weight:500;font-style:normal;font-display:block;src:url('assets/fonts/Inter-500-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+        @font-face{font-family:'Inter24';font-weight:600;font-style:normal;font-display:block;src:url('assets/fonts/Inter-600-cyrillic.woff2') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+        @font-face{font-family:'Inter24';font-weight:600;font-style:normal;font-display:block;src:url('assets/fonts/Inter-600-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+        @font-face{font-family:'Inter24';font-weight:700;font-style:normal;font-display:block;src:url('assets/fonts/Inter-700-cyrillic.woff2') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+        @font-face{font-family:'Inter24';font-weight:700;font-style:normal;font-display:block;src:url('assets/fonts/Inter-700-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+        @font-face{font-family:'Mont24';font-weight:800;font-style:normal;font-display:block;src:url('assets/fonts/Montserrat-800-cyrillic.woff2') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+        @font-face{font-family:'Mont24';font-weight:800;font-style:normal;font-display:block;src:url('assets/fonts/Montserrat-800-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+        @font-face{font-family:'Mont24';font-weight:900;font-style:normal;font-display:block;src:url('assets/fonts/Montserrat-900-cyrillic.woff2') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+        @font-face{font-family:'Mont24';font-weight:900;font-style:normal;font-display:block;src:url('assets/fonts/Montserrat-900-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+        .ch {
+          opacity: 0;
+        }
+
+        #root { position: absolute; inset: 0; background: #f5f2ed; overflow: hidden; color: #1f3a5f; }
+        #s4-label { position: absolute; left: 0; right: 0; top: 200px; text-align: center; font-family: "Plex24", monospace;
+          font-weight: 700; font-size: 40px; letter-spacing: 0.14em; color: #0f5c56; }
+        #s4-phone { position: absolute; left: 110px; right: 110px; top: 290px; height: 1240px; background: #1d2730;
+          border-radius: 86px; padding: 20px; box-sizing: border-box; box-shadow: 0 40px 90px rgba(21, 62, 60, 0.28); }
+        #s4-screen { position: relative; width: 100%; height: 100%; background: #eef3ee; border-radius: 68px; overflow: hidden;
+          font-family: "Inter24", sans-serif; }
+        #s4-head { position: absolute; left: 0; right: 0; top: 0; height: 170px; background: #fffefb; border-bottom: 2px solid #e2e0d8;
+          display: flex; align-items: center; gap: 24px; padding: 40px 44px 0; box-sizing: border-box; z-index: 2; }
+        #s4-ava { width: 88px; height: 88px; border-radius: 24px; background: #0f5c56; color: #fff; font-weight: 700; font-size: 44px;
+          display: flex; align-items: center; justify-content: center; }
+        #s4-title { font-weight: 700; font-size: 38px; }
+        #s4-sub { font-size: 26px; color: #0f5c56; margin-top: 4px; }
+        #s4-sub::before { content: ""; display: inline-block; width: 14px; height: 14px; border-radius: 7px; background: #3fb36b;
+          margin-right: 10px; vertical-align: middle; }
+        #s4-view { position: absolute; left: 0; right: 0; top: 170px; bottom: 0; overflow: hidden; }
+        #s4-list { position: absolute; left: 0; right: 0; top: 0; padding: 36px 34px 60px; box-sizing: border-box;
+          display: flex; flex-direction: column; gap: 22px; }
+        .s4-msg { max-width: 82%; font-size: 33px; line-height: 1.32; padding: 22px 28px; border-radius: 30px; opacity: 0; }
+        .s4-c { align-self: flex-end; background: #1f3a5f; color: #fff; border-bottom-right-radius: 8px; }
+        .s4-a { align-self: flex-start; background: #fff; color: #1f3a5f; border: 2px solid #e2e0d8; border-bottom-left-radius: 8px; }
+        .s4-btns { display: flex; gap: 14px; flex-wrap: wrap; opacity: 0; }
+        .s4-btn { font-size: 30px; font-weight: 600; padding: 16px 26px; border-radius: 40px; background: #fff; color: #1f3a5f;
+          border: 2px solid #e2e0d8; }
+        .s4-dots { align-self: flex-start; display: flex; gap: 10px; padding: 26px 30px; background: #fff; border: 2px solid #e2e0d8;
+          border-radius: 30px; opacity: 0; }
+        .s4-dots i { display: block; width: 14px; height: 14px; border-radius: 7px; background: #7a858c; }
+        #s4-done { align-self: stretch; background: #0f5c56; color: #fff; border-radius: 30px; padding: 30px 32px; opacity: 0;
+          display: flex; gap: 26px; align-items: center; }
+        #s4-check { width: 76px; height: 76px; flex: 0 0 76px; border-radius: 38px; background: #9ed3a8; display: flex;
+          align-items: center; justify-content: center; }
+        #s4-done-t { font-size: 36px; font-weight: 700; }
+        #s4-done-s { font-size: 28px; color: #d5ece0; margin-top: 6px; }
+
+      </style>
+
+      <div id="root" data-composition-id="s4-intern" data-width="1080" data-height="1920">
+
+        <div id="s4-label">СТАЖИРОВКА · 23:40</div>
+        <div id="s4-phone">
+          <div id="s4-screen">
+            <div id="s4-head">
+              <div id="s4-ava">24</div>
+              <div><div id="s4-title">24reply</div><div id="s4-sub">AI-менеджер на связи</div></div>
+            </div>
+            <div id="s4-view" data-layout-allow-overflow data-layout-allow-occlusion>
+              <div id="s4-list">
+                <div class="s4-msg s4-c" id="s4-m1">Здравствуйте! Сколько стоит консультация? Можно на завтра?</div>
+                <div class="s4-dots" id="s4-d1"><i></i><i></i><i></i></div>
+                <div class="s4-msg s4-a" id="s4-m2">Консультация — 150 000 сум, 60 минут. Какой формат удобнее?</div>
+                <div class="s4-btns" id="s4-b1"><span class="s4-btn" id="s4-b1a">В офисе</span><span class="s4-btn">Онлайн</span></div>
+                <div class="s4-dots" id="s4-d2"><i></i><i></i><i></i></div>
+                <div class="s4-msg s4-a" id="s4-m3">Завтра свободно:</div>
+                <div class="s4-btns" id="s4-b2"><span class="s4-btn">11:00</span><span class="s4-btn">14:30</span><span class="s4-btn" id="s4-b2c">18:00</span></div>
+                <div class="s4-dots" id="s4-d3"><i></i><i></i><i></i></div>
+                <div class="s4-msg s4-a" id="s4-m4">Отлично! Как вас зовут и ваш номер телефона?</div>
+                <div class="s4-msg s4-c" id="s4-m5">Sardor, +998 90 123-45-67</div>
+                <div class="s4-dots" id="s4-d4"><i></i><i></i><i></i></div>
+                <div id="s4-done">
+                  <div id="s4-check"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#153e3c" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg></div>
+                  <div><div id="s4-done-t">Заявка оформлена</div><div id="s4-done-s">Завтра · 18:00 · Консультация</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <script>
+        (function () {
+          function split(el) {
+            const text = el.textContent;
+            el.textContent = "";
+            const out = [];
+            for (const c of text) {
+              const s = document.createElement("span");
+              s.className = "ch";
+              s.textContent = c;
+              el.appendChild(s);
+              out.push(s);
+            }
+            return out;
+          }
+          function type(tl, spans, start, cps, caret, keepCaret) {
+            const step = 1 / cps;
+            spans.forEach((s, i) => {
+              const t = start + i * step;
+              tl.set(s, { opacity: 1, boxShadow: "0.09em 0 0 " + caret }, t);
+              if (i < spans.length - 1 || !keepCaret) tl.set(s, { boxShadow: "0 0 0 transparent" }, t + step);
+            });
+            return start + spans.length * step;
+          }
+          function typeSel(tl, sel, start, cps, caret, keep) {
+            return type(tl, split(document.querySelector(sel)), start, cps, caret, keep);
+          }
+          document.fonts.ready.then(function () {
+
+            const tl = gsap.timeline({ paused: true });
+            tl.fromTo("#s4-label", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.35 }, 0.1);
+            tl.fromTo("#s4-phone", { y: 160, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, 0);
+            const view = document.querySelector("#s4-view");
+            const list = document.querySelector("#s4-list");
+            const viewH = view.clientHeight;
+            // Dots occupy layout only while visible; collapse them after they hide so the thread stays tight.
+            const dots = { "#s4-d1": [1.7, 2.5], "#s4-d2": [4.5, 5.1], "#s4-d3": [6.9, 7.4], "#s4-d4": [9.0, 9.6] };
+            Object.entries(dots).forEach(([sel, [a, b]]) => {
+              tl.set(sel, { opacity: 1 }, a);
+              tl.fromTo(sel + " i", { opacity: 0.3 }, { opacity: 1, duration: 0.2, stagger: 0.1, repeat: 1, yoyo: true }, a);
+              tl.set(sel, { opacity: 0, display: "none" }, b);
+            });
+            const shows = [
+              ["#s4-m1", 0.9], ["#s4-m2", 2.5], ["#s4-b1", 3.2], ["#s4-m3", 5.1], ["#s4-b2", 5.6],
+              ["#s4-m4", 7.4], ["#s4-m5", 8.3], ["#s4-done", 9.6],
+            ];
+            // Scroll offsets: measure each item's bottom with every dot row collapsed (final layout).
+            document.querySelectorAll(".s4-dots").forEach((d) => (d.style.display = "none"));
+            const bottoms = shows.map(([sel]) => {
+              const el = document.querySelector(sel);
+              return el.offsetTop + el.offsetHeight + 60;
+            });
+            document.querySelectorAll(".s4-dots").forEach((d) => (d.style.display = ""));
+            shows.forEach(([sel, t], i) => {
+              tl.fromTo(sel, { opacity: 0, y: 24, scale: 0.97 }, { opacity: 1, y: 0, scale: 1, duration: 0.3, ease: "back.out(1.6)" }, t);
+              const scroll = Math.max(0, bottoms[i] - viewH);
+              tl.to(list, { y: -scroll, duration: 0.35, ease: "power2.out" }, t);
+            });
+            // Taps on the chosen buttons.
+            [["#s4-b1a", 4.1], ["#s4-b2c", 6.5]].forEach(([sel, t]) => {
+              tl.to(sel, { scale: 0.92, duration: 0.1 }, t);
+              tl.to(sel, { scale: 1, backgroundColor: "#1f3a5f", color: "#ffffff", borderColor: "#1f3a5f", duration: 0.18 }, t + 0.1);
+            });
+            tl.fromTo("#s4-check", { scale: 0 }, { scale: 1, duration: 0.45, ease: "back.out(2.2)" }, 9.8);
+
+            window.__timelines["s4-intern"] = tl;
+            if (window.__hfForceTimelineRebind) window.__hfForceTimelineRebind();
+          });
+        })();
+      </script>
+    </template>
+  </body>
+</html>

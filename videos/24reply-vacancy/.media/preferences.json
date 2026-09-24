@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "preferences": {
+    "destination": {
+      "value": "reels",
+      "confirmed_in": [
+        "24reply-vacancy"
+      ],
+      "updated_at": "2026-09-24T17:49:27.570Z"
+    },
+    "flow": {
+      "value": "companion",
+      "confirmed_in": [
+        "24reply-vacancy"
+      ],
+      "updated_at": "2026-09-24T17:49:27.620Z"
+    },
+    "storyboard": {
+      "value": "yes",
+      "confirmed_in": [
+        "24reply-vacancy"
+      ],
+      "updated_at": "2026-09-24T17:49:27.673Z"
+    }
+  },
+  "sightings": {}
+}
