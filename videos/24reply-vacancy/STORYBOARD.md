@@ -12,7 +12,7 @@ mode: collaborative
 - scene: На бумажном листе машинка печатает «ИЩЕМ МЕНЕДЖЕРА ПО ПРОДАЖАМ», ниже три требования
 - duration: 7s
 - transition_in: cut
-- status: outline
+- status: animated
 - src: compositions/01-vacancy.html
 - blueprint: typewriter-reveal
 
@@ -24,7 +24,7 @@ mode: collaborative
 - scene: Три коротких удара текстом: 23:40 / Выходной / Обед — «Клиент написал. Никто не ответил.»
 - duration: 5s
 - transition_in: cut
-- status: outline
+- status: animated
 - src: compositions/02-pain.html
 - blueprint: kinetic-type-beats
 
@@ -35,7 +35,7 @@ mode: collaborative
 - scene: Лист резюме «Кандидат: 24reply AI», строки печатаются и собираются списком
 - duration: 9s
 - transition_in: crossfade
-- status: outline
+- status: animated
 - src: compositions/03-resume.html
 - blueprint: grid-card-assemble
 
@@ -47,7 +47,7 @@ mode: collaborative
 - scene: Телефон с чатом 24reply в Telegram; диалог строится сообщение за сообщением до заявки
 - duration: 14s
 - transition_in: wipe
-- status: outline
+- status: animated
 - src: compositions/04-internship.html
 - blueprint: agent-progress-theater
 
@@ -59,7 +59,7 @@ mode: collaborative
 - scene: Уведомление Manager Bot «🔔 Новая заявка #1042» с кнопками «Подтвердить / Взять в работу»
 - duration: 5s
 - transition_in: cut
-- status: outline
+- status: animated
 - src: compositions/05-notify.html
 - blueprint: device-surface-showcase
 
@@ -70,7 +70,7 @@ mode: collaborative
 - scene: Возврат к резюме, удар штампа «ПРИНЯТ», строка «≈83 000 сум/мес · 7 дней бесплатно»
 - duration: 5s
 - transition_in: cut
-- status: outline
+- status: animated
 - src: compositions/06-hired.html
 - blueprint: kinetic-type-beats
 
@@ -81,7 +81,7 @@ mode: collaborative
 - scene: Знак «24ai», 24reply.uz, кнопка «Подключить Telegram», внизу «Powered by Turgunov» со знаком
 - duration: 7s
 - transition_in: crossfade
-- status: outline
+- status: animated
 - src: compositions/07-cta.html
 - blueprint: logo-assemble-lockup
 

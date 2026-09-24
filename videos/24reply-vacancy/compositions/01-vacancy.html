@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <style>
+        @font-face{font-family:'Plex24';font-weight:400;font-style:normal;font-display:block;src:url('assets/fonts/IBMPlexMono-400-cyrillic.woff2') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+        @font-face{font-family:'Plex24';font-weight:400;font-style:normal;font-display:block;src:url('assets/fonts/IBMPlexMono-400-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+        @font-face{font-family:'Plex24';font-weight:700;font-style:normal;font-display:block;src:url('assets/fonts/IBMPlexMono-700-cyrillic.woff2') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+        @font-face{font-family:'Plex24';font-weight:700;font-style:normal;font-display:block;src:url('assets/fonts/IBMPlexMono-700-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+        @font-face{font-family:'Inter24';font-weight:400;font-style:normal;font-display:block;src:url('assets/fonts/Inter-400-cyrillic.woff2') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+        @font-face{font-family:'Inter24';font-weight:400;font-style:normal;font-display:block;src:url('assets/fonts/Inter-400-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+        @font-face{font-family:'Inter24';font-weight:500;font-style:normal;font-display:block;src:url('assets/fonts/Inter-500-cyrillic.woff2') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+        @font-face{font-family:'Inter24';font-weight:500;font-style:normal;font-display:block;src:url('assets/fonts/Inter-500-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+        @font-face{font-family:'Inter24';font-weight:600;font-style:normal;font-display:block;src:url('assets/fonts/Inter-600-cyrillic.woff2') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+        @font-face{font-family:'Inter24';font-weight:600;font-style:normal;font-display:block;src:url('assets/fonts/Inter-600-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+        @font-face{font-family:'Inter24';font-weight:700;font-style:normal;font-display:block;src:url('assets/fonts/Inter-700-cyrillic.woff2') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+        @font-face{font-family:'Inter24';font-weight:700;font-style:normal;font-display:block;src:url('assets/fonts/Inter-700-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+        @font-face{font-family:'Mont24';font-weight:800;font-style:normal;font-display:block;src:url('assets/fonts/Montserrat-800-cyrillic.woff2') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+        @font-face{font-family:'Mont24';font-weight:800;font-style:normal;font-display:block;src:url('assets/fonts/Montserrat-800-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+        @font-face{font-family:'Mont24';font-weight:900;font-style:normal;font-display:block;src:url('assets/fonts/Montserrat-900-cyrillic.woff2') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+        @font-face{font-family:'Mont24';font-weight:900;font-style:normal;font-display:block;src:url('assets/fonts/Montserrat-900-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+        #root {
+          position: absolute;
+          inset: 0;
+          background: #f5f2ed;
+          overflow: hidden;
+          font-family: "Plex24", monospace;
+          color: #1f3a5f;
+        }
+        #s1-sheet {
+          position: absolute;
+          left: 70px;
+          right: 70px;
+          top: 230px;
+          bottom: 380px;
+          background: #fffefb;
+          border: 2px solid #e2e0d8;
+          border-radius: 18px;
+          box-shadow: 0 30px 70px rgba(31, 58, 95, 0.12);
+          padding: 90px 80px;
+          box-sizing: border-box;
+          display: flex;
+          flex-direction: column;
+        }
+        #s1-tag {
+          font-size: 34px;
+          letter-spacing: 0.18em;
+          color: #0f5c56;
+          font-weight: 700;
+        }
+        #s1-rule {
+          display: block;
+          width: 100%;
+          height: 4px;
+          background: #1f3a5f;
+          margin: 36px 0 56px;
+          transform-origin: left center;
+        }
+        #s1-head {
+          font-family: "Mont24", sans-serif;
+          font-weight: 900;
+          font-size: 104px;
+          line-height: 1.02;
+          letter-spacing: -0.02em;
+          text-transform: uppercase;
+          margin: 0;
+        }
+        #s1-req-title {
+          margin-top: 90px;
+          font-size: 40px;
+          font-weight: 700;
+          color: #7a858c;
+        }
+        .s1-req {
+          margin-top: 30px;
+          font-size: 50px;
+          line-height: 1.25;
+          font-weight: 400;
+        }
+        .ch {
+          opacity: 0;
+        }
+      </style>
+
+      <div id="root" data-composition-id="s1-vacancy" data-width="1080" data-height="1920">
+        <div id="s1-sheet">
+          <div id="s1-tag">ВАКАНСИЯ № 24</div>
+          <span id="s1-rule"></span>
+          <h1 id="s1-head">Ищем менеджера по продажам</h1>
+          <div id="s1-req-title">Требования:</div>
+          <div class="s1-req" id="s1-r1">— отвечать ночью</div>
+          <div class="s1-req" id="s1-r2">— не путать цены</div>
+          <div class="s1-req" id="s1-r3">— без отпусков</div>
+        </div>
+      </div>
+
+      <script>
+        (function () {
+          function split(el) {
+            const text = el.textContent;
+            el.textContent = "";
+            const out = [];
+            for (const c of text) {
+              const s = document.createElement("span");
+              s.className = "ch";
+              s.textContent = c;
+              el.appendChild(s);
+              out.push(s);
+            }
+            return out;
+          }
+          function type(tl, spans, start, cps, caret, keepCaret) {
+            const step = 1 / cps;
+            spans.forEach((s, i) => {
+              const t = start + i * step;
+              tl.set(s, { opacity: 1, boxShadow: "0.09em 0 0 " + caret }, t);
+              if (i < spans.length - 1 || !keepCaret) tl.set(s, { boxShadow: "0 0 0 transparent" }, t + step);
+            });
+            return start + spans.length * step;
+          }
+          const tl = gsap.timeline({ paused: true });
+          tl.fromTo("#s1-sheet", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, 0);
+          tl.fromTo("#s1-tag", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 0.1);
+          tl.fromTo("#s1-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power2.inOut" }, 0.15);
+          let t = type(tl, split(document.querySelector("#s1-head")), 0.35, 20, "#1f3a5f", false);
+          tl.fromTo("#s1-req-title", { opacity: 0 }, { opacity: 1, duration: 0.25 }, t + 0.25);
+          t = type(tl, split(document.querySelector("#s1-r1")), t + 0.55, 17, "#0f5c56", false);
+          t = type(tl, split(document.querySelector("#s1-r2")), t + 0.3, 17, "#0f5c56", false);
+          t = type(tl, split(document.querySelector("#s1-r3")), t + 0.3, 17, "#0f5c56", true);
+          tl.to("#s1-sheet", { scale: 1.03, duration: 7 - t, ease: "none" }, t);
+          window.__timelines["s1-vacancy"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>
