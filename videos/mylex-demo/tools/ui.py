@@ -54,24 +54,43 @@ CSS = """
 .kicker{position:absolute;left:90px;top:112px;font-size:24px;font-weight:600;letter-spacing:.18em;
   color:#4A3B63;text-transform:uppercase;}
 .kicker-r{position:absolute;right:90px;top:112px;font-size:24px;font-weight:600;letter-spacing:.12em;color:#645E73;}
-.headline{position:absolute;left:70px;right:70px;top:168px;height:150px;display:flex;align-items:center;
+.headline{position:absolute;left:70px;right:70px;top:150px;height:150px;display:flex;align-items:center;
   justify-content:center;text-align:center;font-family:'MxSerif';font-weight:700;font-size:66px;
   line-height:1.08;color:#2E2A38;}
 .headline em{font-style:normal;color:#4A3B63;}
 
-/* phone */
-.phone{position:absolute;left:130px;top:340px;width:820px;height:1772px;border-radius:118px;
-  background:#2E2A38;padding:22px;
-  box-shadow:0 60px 120px rgba(46,42,56,.28),0 18px 40px rgba(74,59,99,.22),inset 0 0 0 3px #4a4458;}
-.screen{position:relative;width:776px;height:1728px;border-radius:96px;overflow:hidden;background:#F4F1F8;}
-.island{position:absolute;left:50%;top:22px;width:230px;height:66px;margin-left:-115px;border-radius:40px;
-  background:#15131B;z-index:20;}
-.status{position:absolute;left:0;right:0;top:0;height:108px;padding:34px 66px 0;display:flex;
-  justify-content:space-between;font-size:30px;font-weight:600;color:#2E2A38;z-index:19;}
-.status .icons{display:flex;gap:12px;align-items:center;}
-.status .icons i{display:block;width:34px;height:20px;border-radius:6px;background:#2E2A38;}
-.status .icons i.s{width:28px;background:none;border-bottom:20px solid #2E2A38;border-left:28px solid transparent;
-  height:0;border-radius:0;}
+/* phone — iPhone 15 Pro proportions (1:2.047), authored at 820 wide, shown at 0.915 */
+.phone{position:absolute;left:130px;top:322px;width:820px;height:1679px;border-radius:128px;padding:7px;
+  transform:scale(.915);transform-origin:50% 0;
+  background:linear-gradient(140deg,#c9c6cf 0%,#6d6a74 18%,#e4e1e8 42%,#8a8792 62%,#d3d0d8 82%,#77747e 100%);
+  box-shadow:0 70px 140px rgba(46,42,56,.30),0 24px 50px rgba(74,59,99,.24);}
+.phone .side{position:absolute;width:9px;border-radius:5px;
+  background:linear-gradient(90deg,#77747e,#d6d3db 50%,#8a8792);}
+.phone .side.act{left:-8px;top:260px;height:74px;}
+.phone .side.vu{left:-8px;top:390px;height:130px;}
+.phone .side.vd{left:-8px;top:548px;height:130px;}
+.phone .side.pw{right:-8px;top:440px;height:200px;}
+.bezel{width:100%;height:100%;border-radius:121px;background:#0b0a0e;padding:15px;
+  box-shadow:inset 0 0 0 2px #26232c;}
+.screen{position:relative;width:776px;height:1635px;border-radius:106px;overflow:hidden;background:#F4F1F8;}
+.island{position:absolute;left:50%;top:24px;width:252px;height:74px;margin-left:-126px;border-radius:40px;
+  background:#000;z-index:20;}
+.island::after{content:"";position:absolute;right:26px;top:24px;width:26px;height:26px;border-radius:50%;
+  background:radial-gradient(circle at 40% 40%,#2b3350,#0a0b10 70%);}
+.status{position:absolute;left:0;right:0;top:0;height:112px;padding:38px 62px 0 78px;display:flex;
+  justify-content:space-between;align-items:flex-start;z-index:19;}
+.status .time{font-size:34px;font-weight:600;color:#000;letter-spacing:-.01em;width:150px;text-align:center;}
+.status .icons{display:flex;gap:12px;align-items:center;height:42px;}
+.status .icons svg{height:24px;width:auto;display:block;}
+.homebar{position:absolute;left:50%;bottom:16px;width:280px;height:10px;margin-left:-140px;border-radius:5px;
+  background:#000;z-index:25;}
+.homebar.light{background:#fff;}
+/* iOS tab bar */
+.tabbar{position:absolute;left:0;right:0;bottom:0;height:168px;background:rgba(250,249,252,.96);
+  border-top:2px solid rgba(46,42,56,.08);display:flex;justify-content:space-around;padding-top:16px;z-index:18;}
+.tab{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:20px;font-weight:500;color:#8E8A99;width:150px;}
+.tab svg{width:46px;height:46px;}
+.tab.on{color:#4A3B63;}
 .view{position:absolute;inset:0;}
 
 /* app parts */
@@ -128,13 +147,16 @@ CSS = """
 .row{height:92px;display:flex;align-items:center;gap:22px;font-size:30px;color:#2E2A38;border-bottom:2px solid #E2DCEB;}
 .row svg{width:36px;height:36px;flex:none;}
 .row em{font-style:normal;color:#645E73;}
-.kbd{position:absolute;left:0;right:0;bottom:0;height:720px;background:#E4DFEC;padding:22px 10px 0;}
-.krow{display:flex;justify-content:center;gap:9px;margin-bottom:16px;}
-.key{width:62px;height:92px;border-radius:14px;background:#fff;display:flex;align-items:center;justify-content:center;
-  font-size:34px;color:#2E2A38;box-shadow:0 3px 0 rgba(46,42,56,.18);}
-.key.w{width:150px;font-size:24px;background:#CFC8DA;}
-.key.sp{width:380px;font-size:26px;color:#645E73;}
-.key.go{width:150px;background:#4A3B63;color:#fff;font-size:24px;}
+.kbd{position:absolute;left:0;right:0;bottom:0;height:640px;background:#D3D5DC;padding:18px 8px 0;z-index:17;}
+.krow{display:flex;justify-content:center;gap:10px;margin-bottom:22px;}
+.key{width:61px;height:90px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;
+  font-size:36px;color:#000;box-shadow:0 2px 0 rgba(0,0,0,.28);}
+.key.w{width:90px;font-size:30px;background:#ABB0BC;}
+.key.n{width:120px;font-size:28px;background:#ABB0BC;}
+.key.sp{width:356px;font-size:28px;color:#000;}
+.key.go{width:170px;background:#4A3B63;color:#fff;font-size:28px;}
+.kbd .sys{display:flex;justify-content:space-between;padding:4px 44px 0;}
+.kbd .sys svg{width:48px;height:48px;}
 .tap{position:absolute;width:120px;height:120px;margin:-60px 0 0 -60px;border-radius:50%;
   border:6px solid #4A3B63;background:rgba(74,59,99,.16);z-index:30;}
 
@@ -156,16 +178,16 @@ CSS = """
 .price{font-size:26px;font-weight:700;color:#4A3B63;}
 .region{font-size:22px;font-weight:600;color:#645E73;padding:6px 14px;border-radius:12px;background:#F4F1F8;}
 .sheet{position:absolute;left:0;right:0;bottom:0;border-radius:48px 48px 0 0;background:#fff;
-  box-shadow:0 -20px 60px rgba(46,42,56,.18);padding:22px 48px 200px;}
-.handle{width:90px;height:10px;border-radius:5px;background:#D6CFE0;margin:0 auto 26px;}
+  box-shadow:0 -20px 60px rgba(46,42,56,.18);padding:18px 48px 64px;z-index:16;}
+.handle{width:72px;height:10px;border-radius:5px;background:#C7C4CD;margin:0 auto 26px;}
 .sheet h4{font-family:'MxSerif';font-weight:700;font-size:40px;margin-bottom:14px;}
 .radio{height:88px;display:flex;align-items:center;gap:22px;font-size:30px;border-bottom:2px solid #EFEAF6;}
 .radio i{width:40px;height:40px;border-radius:50%;border:3px solid #B9B0C8;flex:none;}
 .radio.on i{border:12px solid #4A3B63;}
-.btn{height:104px;border-radius:32px;background:#4A3B63;color:#fff;font-size:30px;font-weight:600;display:flex;
+.btn{font-family:'MxSans';height:104px;border-radius:32px;background:#4A3B63;color:#fff;font-size:30px;font-weight:600;display:flex;
   align-items:center;justify-content:center;box-shadow:0 14px 30px rgba(74,59,99,.30);}
 .btn.ghost{background:#fff;color:#4A3B63;border:3px solid #4A3B63;box-shadow:none;}
-.scrim{position:absolute;inset:0;background:rgba(46,42,56,.32);}
+.scrim{position:absolute;inset:0;background:rgba(20,18,26,.34);z-index:15;}
 
 /* profile */
 .prof{position:absolute;left:44px;right:44px;top:210px;text-align:center;}
@@ -239,6 +261,10 @@ IC = {
     "chat": '<path d="M5 18l-1 3 4-2h9a3 3 0 0 0 3-3V8a3 3 0 0 0-3-3H7a3 3 0 0 0-3 3v7"/>',
     "check": '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
     "chev": '<path d="M7 10l5 5 5-5"/>',
+    "cal": '<rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M4 10h16M9 3v4M15 3v4"/>',
+    "user": '<circle cx="12" cy="8.5" r="4"/><path d="M4.5 20c.8-3.6 3.8-5.5 7.5-5.5s6.7 1.9 7.5 5.5"/>',
+    "globe": '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.6 2.6 15.4 0 18M12 3c-2.6 2.6-2.6 15.4 0 18"/>',
+    "mic": '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/>',
 }
 
 
@@ -253,13 +279,31 @@ LAWYERS = [
 ]
 
 
+SIGNAL = ('<svg viewBox="0 0 36 24"><rect x="0" y="16" width="6" height="8" rx="1.5" fill="#000"/>'
+          '<rect x="10" y="11" width="6" height="13" rx="1.5" fill="#000"/><rect x="20" y="6" width="6" height="18" rx="1.5" fill="#000"/>'
+          '<rect x="30" y="0" width="6" height="24" rx="1.5" fill="#000"/></svg>')
+WIFI = ('<svg viewBox="0 0 34 24"><path d="M17 24l-5.2-6.2a8 8 0 0 1 10.4 0z" fill="#000"/>'
+        '<path d="M4.6 9.4a19 19 0 0 1 24.8 0l-3.3 3.9a14 14 0 0 0-18.2 0z" fill="#000"/>'
+        '<path d="M0 4.2a26 26 0 0 1 34 0" stroke="#000" stroke-width="4.4" fill="none" stroke-linecap="round" transform="translate(0 1)"/></svg>')
+BATT = ('<svg viewBox="0 0 54 24"><rect x="1" y="1" width="46" height="22" rx="7" fill="none" stroke="#000" stroke-opacity=".38" stroke-width="2"/>'
+        '<rect x="4.5" y="4.5" width="39" height="15" rx="4" fill="#000"/><path d="M50 8.5v7a3.5 3.5 0 0 0 0-7z" fill="#000" fill-opacity=".45"/></svg>')
+
+
 def chrome():
-    return ('<div class="island"></div><div class="status"><span>9:41</span>'
-            '<span class="icons"><i class="s"></i><i></i></span></div>')
+    return ('<div class="island"></div><div class="status"><span class="time">9:41</span>'
+            f'<span class="icons">{SIGNAL}{WIFI}{BATT}</span></div><div class="homebar"></div>')
+
+
+def tabbar(active=0):
+    items = [("home", "Главная"), ("search", "Поиск"), ("cal", "Записи"), ("user", "Профиль")]
+    return '<div class="tabbar">' + "".join(
+        f'<div class="tab{" on" if i == active else ""}">{icon(n, "#4A3B63" if i == active else "#8E8A99")}{t}</div>'
+        for i, (n, t) in enumerate(items)) + "</div>"
 
 
 def stage(headline, inner_screen, kicker="MYLEX · демо", step="", phone=True, extra=""):
-    ph = (f'<div class="phone" id="phone"><div class="screen">{chrome()}{inner_screen}</div></div>'
+    ph = (f'<div class="phone" id="phone"><i class="side act"></i><i class="side vu"></i><i class="side vd"></i>'
+          f'<i class="side pw"></i><div class="bezel"><div class="screen">{inner_screen}{chrome()}</div></div></div>'
           if phone else "")
     hl = f'<div class="headline" id="headline"><span class="hl-text">{headline}</span></div>' if headline else ""
     return (f'<div class="stage"><div class="glow a"></div><div class="glow b"></div><div class="ghost">§</div>'
@@ -294,7 +338,7 @@ def scr_home():
         f'<div class="cats" style="top:640px;">{cat_html}</div>'
         '<div class="sec" style="top:1054px;"><h3>Рекомендуемые юристы</h3><a>Все →</a></div>'
         f'<div class="carousel" style="top:1126px;">{cards}</div>'
-        '</div>')
+        f'{tabbar(0)}</div>')
 
 
 KEYS = ["йцукенгшщзх", "фывапролджэ", "ячсмитьбю"]
@@ -304,8 +348,9 @@ def keyboard():
     rows = "".join(f'<div class="krow">{"".join(f"<div class=key>{c}</div>" for c in r)}</div>' for r in KEYS[:2])
     r3 = ('<div class="krow"><div class="key w">⇧</div>' + "".join(f"<div class=key>{c}</div>" for c in KEYS[2])
           + '<div class="key w">⌫</div></div>')
-    r4 = '<div class="krow"><div class="key w">123</div><div class="key sp">пробел</div><div class="key go">Найти</div></div>'
-    return f'<div class="kbd">{rows}{r3}{r4}</div>'
+    r4 = '<div class="krow"><div class="key n">123</div><div class="key n">☺</div><div class="key sp">пробел</div><div class="key go">Найти</div></div>'
+    sysrow = f'<div class="sys">{icon("globe", "#4d4a55", 1.8)}{icon("mic", "#4d4a55", 1.8)}</div>'
+    return f'<div class="kbd">{rows}{r3}{r4}{sysrow}</div>'
 
 
 def scr_search(typed="семейный юрист", tap=True):
