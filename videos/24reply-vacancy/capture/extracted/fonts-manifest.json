@@ -1,0 +1,100 @@
+{
+  "files": [
+    {
+      "file": "inter-latin-400-normal.C38fXH4l.woff2",
+      "family": "Inter",
+      "rawFamily": "Inter",
+      "subfamily": "Regular",
+      "postscript": "Inter-Regular",
+      "weight": 400,
+      "style": "normal",
+      "variationAxes": [],
+      "identified": true,
+      "isIcon": false
+    },
+    {
+      "file": "inter-latin-400-normal.CyCys3Eg.woff",
+      "family": "Inter",
+      "rawFamily": "Inter",
+      "subfamily": "Regular",
+      "postscript": "Inter-Regular",
+      "weight": 400,
+      "style": "normal",
+      "variationAxes": [],
+      "identified": true,
+      "isIcon": false
+    },
+    {
+      "file": "inter-latin-ext-400-normal.77YHD8bZ.woff",
+      "family": "Inter",
+      "rawFamily": "Inter",
+      "subfamily": "Regular",
+      "postscript": "Inter-Regular",
+      "weight": 400,
+      "style": "normal",
+      "variationAxes": [],
+      "identified": true,
+      "isIcon": false
+    },
+    {
+      "file": "inter-latin-ext-400-normal.C1nco2VV.woff2",
+      "family": "Inter",
+      "rawFamily": "Inter",
+      "subfamily": "Regular",
+      "postscript": "Inter-Regular",
+      "weight": 400,
+      "style": "normal",
+      "variationAxes": [],
+      "identified": true,
+      "isIcon": false
+    },
+    {
+      "file": "inter-latin-ext-500-normal.BxGbmqWO.woff",
+      "family": "Inter",
+      "rawFamily": "Inter Medium",
+      "subfamily": "Regular",
+      "postscript": "Inter-Medium",
+      "weight": 500,
+      "style": "normal",
+      "variationAxes": [],
+      "identified": true,
+      "isIcon": false
+    },
+    {
+      "file": "inter-latin-ext-500-normal.CV4jyFjo.woff2",
+      "family": "Inter",
+      "rawFamily": "Inter Medium",
+      "subfamily": "Regular",
+      "postscript": "Inter-Medium",
+      "weight": 500,
+      "style": "normal",
+      "variationAxes": [],
+      "identified": true,
+      "isIcon": false
+    }
+  ],
+  "families": [
+    {
+      "family": "Inter",
+      "weights": [
+        400,
+        500
+      ],
+      "variable": false,
+      "fileCount": 6,
+      "files": [
+        "inter-latin-400-normal.C38fXH4l.woff2",
+        "inter-latin-400-normal.CyCys3Eg.woff",
+        "inter-latin-ext-400-normal.77YHD8bZ.woff",
+        "inter-latin-ext-400-normal.C1nco2VV.woff2",
+        "inter-latin-ext-500-normal.BxGbmqWO.woff",
+        "inter-latin-ext-500-normal.CV4jyFjo.woff2"
+      ]
+    }
+  ],
+  "unidentified": [],
+  "meta": {
+    "generatedAt": "2026-09-24T17:48:04.099Z",
+    "tool": "fontkit"
+  }
+}

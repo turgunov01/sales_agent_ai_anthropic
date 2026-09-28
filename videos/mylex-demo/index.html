@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      *{margin:0;padding:0;box-sizing:border-box;}
+      html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#F4F1F8;}
+      @font-face{font-family:'MxSerif';font-weight:400;font-style:normal;font-display:block;src:url('assets/fonts/PTSerif-400-cyrillic.woff2') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+@font-face{font-family:'MxSerif';font-weight:400;font-style:normal;font-display:block;src:url('assets/fonts/PTSerif-400-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face{font-family:'MxSerif';font-weight:700;font-style:normal;font-display:block;src:url('assets/fonts/PTSerif-700-cyrillic.woff2') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+@font-face{font-family:'MxSerif';font-weight:700;font-style:normal;font-display:block;src:url('assets/fonts/PTSerif-700-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face{font-family:'MxSans';font-weight:400;font-style:normal;font-display:block;src:url('assets/fonts/Inter-400-cyrillic.woff2') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+@font-face{font-family:'MxSans';font-weight:400;font-style:normal;font-display:block;src:url('assets/fonts/Inter-400-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face{font-family:'MxSans';font-weight:500;font-style:normal;font-display:block;src:url('assets/fonts/Inter-500-cyrillic.woff2') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+@font-face{font-family:'MxSans';font-weight:500;font-style:normal;font-display:block;src:url('assets/fonts/Inter-500-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face{font-family:'MxSans';font-weight:600;font-style:normal;font-display:block;src:url('assets/fonts/Inter-600-cyrillic.woff2') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+@font-face{font-family:'MxSans';font-weight:600;font-style:normal;font-display:block;src:url('assets/fonts/Inter-600-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face{font-family:'MxSans';font-weight:700;font-style:normal;font-display:block;src:url('assets/fonts/Inter-700-cyrillic.woff2') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+@font-face{font-family:'MxSans';font-weight:700;font-style:normal;font-display:block;src:url('assets/fonts/Inter-700-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+      
+.stage{position:absolute;inset:0;width:1080px;height:1920px;overflow:hidden;background:#F4F1F8;
+  font-family:'MxSans',system-ui,sans-serif;color:#2E2A38;}
+.glow{position:absolute;border-radius:50%;pointer-events:none;}
+.glow.a{width:980px;height:980px;left:-360px;top:-260px;
+  background:radial-gradient(circle,rgba(106,87,144,.30) 0%,rgba(106,87,144,0) 68%);}
+.glow.b{width:1100px;height:1100px;right:-460px;bottom:-300px;
+  background:radial-gradient(circle,rgba(74,59,99,.26) 0%,rgba(74,59,99,0) 68%);}
+.ghost-glyph{position:absolute;left:640px;top:980px;font-family:'MxSerif';font-weight:700;font-size:1100px;
+  line-height:1;color:rgba(74,59,99,.07);pointer-events:none;}
+.rule{position:absolute;left:90px;right:90px;top:92px;height:3px;background:rgba(74,59,99,.22);}
+.kicker{position:absolute;left:90px;top:112px;font-size:24px;font-weight:600;letter-spacing:.18em;
+  color:#4A3B63;text-transform:uppercase;}
+.kicker-r{position:absolute;right:90px;top:112px;font-size:24px;font-weight:600;letter-spacing:.12em;color:#645E73;}
+.headline{position:absolute;left:70px;right:70px;top:150px;height:150px;display:flex;align-items:center;
+  justify-content:center;text-align:center;font-family:'MxSerif';font-weight:700;font-size:66px;
+  line-height:1.08;color:#2E2A38;}
+.headline em{font-style:normal;color:#4A3B63;}
+
+/* phone — iPhone 15 Pro proportions (1:2.047), authored at 820 wide, shown at 0.915 */
+.phone{position:absolute;left:130px;top:322px;width:820px;height:1679px;border-radius:128px;padding:7px;
+  transform:scale(.915);transform-origin:50% 0;
+  background:linear-gradient(140deg,#c9c6cf 0%,#6d6a74 18%,#e4e1e8 42%,#8a8792 62%,#d3d0d8 82%,#77747e 100%);
+  box-shadow:0 70px 140px rgba(46,42,56,.30),0 24px 50px rgba(74,59,99,.24);}
+.phone .side{position:absolute;width:9px;border-radius:5px;
+  background:linear-gradient(90deg,#77747e,#d6d3db 50%,#8a8792);}
+.phone .side.act{left:-8px;top:260px;height:74px;}
+.phone .side.vu{left:-8px;top:390px;height:130px;}
+.phone .side.vd{left:-8px;top:548px;height:130px;}
+.phone .side.pw{right:-8px;top:440px;height:200px;}
+.bezel{width:100%;height:100%;border-radius:121px;background:#0b0a0e;padding:15px;
+  box-shadow:inset 0 0 0 2px #26232c;}
+.screen{position:relative;width:776px;height:1635px;border-radius:106px;overflow:hidden;background:#F4F1F8;}
+.island{position:absolute;left:50%;top:24px;width:252px;height:74px;margin-left:-126px;border-radius:40px;
+  background:#000;z-index:20;}
+.island::after{content:"";position:absolute;right:26px;top:24px;width:26px;height:26px;border-radius:50%;
+  background:radial-gradient(circle at 40% 40%,#2b3350,#0a0b10 70%);}
+.status{position:absolute;left:0;right:0;top:0;height:112px;padding:38px 62px 0 78px;display:flex;
+  justify-content:space-between;align-items:flex-start;z-index:19;}
+.status .time{font-size:34px;font-weight:600;color:#000;letter-spacing:-.01em;width:150px;text-align:center;}
+.status .icons{display:flex;gap:12px;align-items:center;height:42px;}
+.status .icons svg{height:24px;width:auto;display:block;}
+.homebar{position:absolute;left:50%;bottom:16px;width:280px;height:10px;margin-left:-140px;border-radius:5px;
+  background:#000;z-index:25;}
+.homebar.light{background:#fff;}
+/* iOS tab bar */
+.tabbar{position:absolute;left:0;right:0;bottom:0;height:168px;background:rgba(250,249,252,.96);
+  border-top:2px solid rgba(46,42,56,.08);display:flex;justify-content:space-around;padding-top:16px;z-index:18;}
+.tab{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:20px;font-weight:500;color:#686476;width:150px;}
+.tab svg{width:46px;height:46px;}
+.tab.on{color:#4A3B63;}
+.view{position:absolute;inset:0;}
+
+/* app parts */
+.appbar{position:absolute;left:44px;right:44px;top:120px;height:84px;display:flex;align-items:center;
+  justify-content:space-between;}
+.logo{font-family:'MxSerif';font-weight:700;color:#4A3B63;letter-spacing:.04em;}
+.appbar .logo{font-size:52px;}
+.iconbtn{width:76px;height:76px;border-radius:38px;background:#fff;display:flex;align-items:center;
+  justify-content:center;box-shadow:0 6px 18px rgba(74,59,99,.10);}
+.iconbtn svg{width:38px;height:38px;}
+.avatar{border-radius:50%;background:#E7E1F0;color:#4A3B63;font-family:'MxSerif';font-weight:700;
+  display:flex;align-items:center;justify-content:center;}
+.search{position:absolute;left:44px;right:44px;height:100px;border-radius:30px;background:#fff;
+  display:flex;align-items:center;gap:20px;padding:0 30px;font-size:30px;color:#645E73;
+  box-shadow:0 10px 30px rgba(74,59,99,.10);}
+.search svg{width:40px;height:40px;flex:none;}
+.search.active{border:3px solid #4A3B63;color:#2E2A38;}
+.caret{display:inline-block;width:3px;height:38px;background:#4A3B63;vertical-align:middle;margin-left:2px;}
+.stats{position:absolute;left:44px;right:44px;height:170px;border-radius:32px;background:#4A3B63;
+  display:flex;align-items:center;justify-content:space-around;color:#fff;
+  box-shadow:0 18px 40px rgba(74,59,99,.30);}
+.stat{text-align:center;}
+.stat b{display:block;font-family:'MxSerif';font-weight:700;font-size:54px;line-height:1.05;}
+.stat span{font-size:24px;color:#E3DCF0;}
+.stat-sep{width:2px;height:90px;background:rgba(255,255,255,.22);}
+.sec{position:absolute;left:44px;right:44px;display:flex;justify-content:space-between;align-items:baseline;}
+.sec h3{font-family:'MxSerif';font-weight:700;font-size:38px;color:#2E2A38;}
+.sec a{font-size:26px;font-weight:600;color:#4A3B63;}
+.cats{position:absolute;left:44px;right:44px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.cat{height:176px;border-radius:32px;background:#fff;box-shadow:0 8px 24px rgba(74,59,99,.08);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:0 10px;}
+.cat .ic{width:76px;height:76px;border-radius:24px;background:#E7E1F0;display:flex;align-items:center;justify-content:center;}
+.cat .ic svg{width:42px;height:42px;}
+.cat span{font-size:24px;font-weight:600;line-height:1.15;text-align:center;color:#2E2A38;}
+.carousel{position:absolute;left:44px;display:flex;gap:22px;}
+.lcard{width:300px;height:330px;border-radius:32px;background:#fff;box-shadow:0 10px 28px rgba(74,59,99,.10);
+  padding:28px;display:flex;flex-direction:column;gap:10px;flex:none;}
+.lcard .avatar{width:104px;height:104px;font-size:40px;}
+.lcard b{font-size:28px;font-weight:600;line-height:1.2;margin-top:8px;}
+.tag{display:inline-block;align-self:flex-start;padding:8px 16px;border-radius:14px;background:#E7E1F0;color:#4A3B63;
+  font-size:22px;font-weight:600;}
+.rating{font-size:24px;font-weight:600;color:#2E2A38;}
+.rating i{font-style:normal;color:#9A7216;}
+.rating small{color:#645E73;font-weight:400;font-size:22px;}
+
+/* search screen */
+.backrow{position:absolute;left:44px;right:44px;top:124px;display:flex;align-items:center;gap:20px;}
+.backrow h2{font-family:'MxSerif';font-weight:700;font-size:46px;}
+.chips{position:absolute;left:44px;right:0;display:flex;gap:16px;flex-wrap:nowrap;}
+.chip{flex:none;height:72px;padding:0 28px;border-radius:36px;background:#fff;border:2px solid #E2DCEB;
+  display:flex;align-items:center;gap:10px;font-size:26px;font-weight:600;color:#2E2A38;}
+.chip.on{background:#4A3B63;border-color:#4A3B63;color:#fff;}
+.list{position:absolute;left:44px;right:44px;}
+.row{height:92px;display:flex;align-items:center;gap:22px;font-size:30px;color:#2E2A38;border-bottom:2px solid #E2DCEB;}
+.row svg{width:36px;height:36px;flex:none;}
+.row em{font-style:normal;color:#645E73;}
+.kbd{position:absolute;left:0;right:0;bottom:0;height:640px;background:#D3D5DC;padding:18px 8px 0;z-index:17;}
+.krow{display:flex;justify-content:center;gap:10px;margin-bottom:22px;}
+.key{width:61px;height:90px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;
+  font-size:36px;color:#000;box-shadow:0 2px 0 rgba(0,0,0,.28);}
+.key.w{width:90px;font-size:30px;background:#ABB0BC;}
+.key.n{width:120px;font-size:28px;background:#ABB0BC;}
+.key.sp{width:356px;font-size:28px;color:#000;}
+.key.go{width:170px;background:#4A3B63;color:#fff;font-size:28px;}
+.kbd .sys{display:flex;justify-content:space-between;padding:4px 44px 0;}
+.kbd .sys svg{width:48px;height:48px;}
+.tap{position:absolute;width:120px;height:120px;margin:-60px 0 0 -60px;border-radius:50%;
+  border:5px solid rgba(74,59,99,.85);background:rgba(74,59,99,.10);z-index:30;}
+
+/* catalog */
+.pills{position:absolute;left:44px;top:236px;display:flex;gap:14px;white-space:nowrap;}
+.pill{flex:none;height:68px;padding:0 24px;border-radius:34px;background:#fff;border:2px solid #E2DCEB;display:flex;
+  align-items:center;gap:8px;font-size:25px;font-weight:600;color:#2E2A38;}
+.pill.on{border-color:#4A3B63;color:#4A3B63;background:#EFEAF6;}
+.count{position:absolute;left:44px;top:334px;font-size:26px;color:#645E73;}
+.count b{color:#2E2A38;}
+.pcards{position:absolute;left:44px;right:44px;top:394px;display:flex;flex-direction:column;gap:22px;}
+.pcard{height:236px;border-radius:32px;background:#fff;box-shadow:0 10px 28px rgba(74,59,99,.09);padding:28px;
+  display:flex;gap:26px;}
+.pcard .avatar{width:150px;height:150px;border-radius:30px;font-size:52px;flex:none;}
+.pcard .body{display:flex;flex-direction:column;gap:8px;flex:1;min-width:0;}
+.pcard b{font-size:32px;font-weight:600;}
+.pcard .spec{font-size:25px;color:#645E73;}
+.pcard .meta{display:flex;justify-content:space-between;align-items:center;margin-top:6px;}
+.price{font-size:26px;font-weight:700;color:#4A3B63;}
+.region{font-size:22px;font-weight:600;color:#645E73;padding:6px 14px;border-radius:12px;background:#F4F1F8;}
+.sheet{position:absolute;left:0;right:0;bottom:0;border-radius:48px 48px 0 0;background:#fff;
+  box-shadow:0 -20px 60px rgba(46,42,56,.18);padding:18px 48px 64px;z-index:16;}
+.handle{width:72px;height:10px;border-radius:5px;background:#C7C4CD;margin:0 auto 26px;}
+.sheet h4{font-family:'MxSerif';font-weight:700;font-size:40px;margin-bottom:14px;}
+.radio{height:88px;display:flex;align-items:center;gap:22px;font-size:30px;border-bottom:2px solid #EFEAF6;}
+.radio i{width:40px;height:40px;border-radius:50%;border:3px solid #B9B0C8;flex:none;}
+.radio.on i{border:12px solid #4A3B63;}
+.btn{font-family:'MxSans';height:104px;border-radius:32px;background:#4A3B63;color:#fff;font-size:30px;font-weight:600;display:flex;
+  align-items:center;justify-content:center;box-shadow:0 14px 30px rgba(74,59,99,.30);}
+.btn.ghost{background:#fff;color:#4A3B63;border:3px solid #4A3B63;box-shadow:none;}
+.scrim{position:absolute;inset:0;background:rgba(20,18,26,.34);z-index:15;}
+
+/* profile */
+.prof{position:absolute;left:44px;right:44px;top:210px;text-align:center;}
+.prof .avatar{width:210px;height:210px;font-size:76px;margin:0 auto 22px;box-shadow:0 0 0 10px #fff,0 14px 34px rgba(74,59,99,.20);}
+.prof h2{font-family:'MxSerif';font-weight:700;font-size:54px;}
+.prof .spec{font-size:28px;color:#645E73;margin-top:8px;}
+.prof .rating{margin-top:12px;font-size:28px;}
+.bio{position:absolute;left:110px;right:110px;top:680px;font-size:27px;line-height:1.45;color:#4d4760;text-align:center;}
+.schips{position:absolute;left:44px;right:44px;top:800px;display:flex;justify-content:center;gap:14px;}
+.schip{height:70px;padding:0 22px;border-radius:22px;background:#fff;box-shadow:0 6px 18px rgba(74,59,99,.08);
+  display:flex;align-items:center;font-size:25px;font-weight:600;color:#4A3B63;}
+.days{display:flex;gap:14px;margin:6px 0 24px;}
+.day{flex:1;height:112px;border-radius:26px;border:2px solid #E2DCEB;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;font-size:22px;color:#645E73;}
+.day b{font-size:34px;color:#2E2A38;}
+.day.on{background:#4A3B63;border-color:#4A3B63;color:#E3DCF0;}
+.day.on b{color:#fff;}
+.slots{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px;}
+.slot{height:80px;border-radius:22px;border:2px solid #E2DCEB;display:flex;align-items:center;justify-content:center;
+  font-size:28px;font-weight:600;color:#2E2A38;}
+.slot.on{background:#4A3B63;border-color:#4A3B63;color:#fff;}
+.sublabel{font-size:24px;font-weight:600;color:#645E73;letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px;}
+
+/* confirm */
+.okwrap{position:absolute;left:44px;right:44px;top:330px;text-align:center;}
+.okcircle{width:250px;height:250px;border-radius:50%;background:#4A3B63;margin:0 auto 50px;display:flex;
+  align-items:center;justify-content:center;box-shadow:0 0 0 26px #E7E1F0,0 24px 60px rgba(74,59,99,.35);}
+.okcircle svg{width:130px;height:130px;}
+.okwrap h2{font-family:'MxSerif';font-weight:700;font-size:56px;line-height:1.12;max-width:560px;margin:0 auto;}
+.okwrap p{font-size:29px;color:#645E73;margin-top:22px;line-height:1.45;}
+.okcard{position:absolute;left:44px;right:44px;top:1010px;border-radius:32px;background:#fff;padding:30px 34px;
+  display:flex;align-items:center;gap:26px;box-shadow:0 10px 28px rgba(74,59,99,.09);}
+.okcard .avatar{width:96px;height:96px;font-size:36px;flex:none;}
+.okcard b{font-size:30px;font-weight:600;display:block;}
+.okcard span{font-size:25px;color:#645E73;}
+.chatfab{position:absolute;right:44px;top:124px;width:84px;height:84px;border-radius:42px;background:#4A3B63;
+  display:flex;align-items:center;justify-content:center;box-shadow:0 10px 26px rgba(74,59,99,.35);}
+.chatfab svg{width:42px;height:42px;}
+
+/* brand card */
+.brand{position:absolute;left:0;right:0;top:0;bottom:0;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;text-align:center;}
+.brand .logo{font-size:210px;line-height:1;}
+.brand .bar{width:420px;height:4px;background:#4A3B63;margin:54px 0 46px;border-radius:2px;}
+.brand .tagline{font-size:46px;font-weight:500;color:#2E2A38;}
+.brand .url{font-size:38px;font-weight:600;color:#4A3B63;margin-top:26px;letter-spacing:.02em;}
+.powered{position:absolute;left:0;right:0;bottom:130px;display:flex;align-items:center;justify-content:center;gap:18px;
+  font-size:26px;color:#645E73;}
+.powered img{width:54px;height:54px;}
+.powered b{color:#2E2A38;font-weight:600;letter-spacing:.04em;}
+
+      
+#root{position:relative;width:1080px;height:1920px;overflow:hidden;background:#F4F1F8;font-family:'MxSans',system-ui,sans-serif;color:#2E2A38;}
+.layer{position:absolute;inset:0;width:1080px;height:1920px;}
+.hl{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;}
+.steps span{position:absolute;right:0;top:0;opacity:0;white-space:nowrap;}
+.kicker-r.steps{width:120px;height:30px;}
+.rig{position:absolute;inset:0;}
+.cam{position:absolute;inset:0;transform-origin:540px 1090px;}
+.split .ch{display:inline-block;}
+.typed .ch{display:none;}
+.search .caret{animation:none;}
+#fly-avatar{position:absolute;left:283px;top:210px;width:210px;height:210px;font-size:76px;z-index:14;opacity:0;
+  border-radius:105px;}
+.tap{opacity:0;left:0;top:0;}
+#v-home,#v-search,#v-catalog,#v-profile,#v-confirm{opacity:0;}
+.okcircle svg path{stroke-dasharray:30;stroke-dashoffset:30;}
+.brandwrap{position:absolute;inset:0;}
+.brand .logo .ch{display:inline-block;}
+
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="20.0" data-width="1080" data-height="1920">
+      <div class="clip layer stage" id="c-bg" data-start="0" data-duration="20.0" data-track-index="0">
+        <div class="glow a" data-layout-ignore></div><div class="glow b" data-layout-ignore></div><div class="ghost-glyph" data-layout-ignore>§</div>
+        <div class="rule"></div><div class="kicker">MYLEX · демо</div><div class="kicker-r steps"><span>01 / 07</span><span>02 / 07</span><span>03 / 07</span><span>04 / 07</span><span>05 / 07</span><span>06 / 07</span><span>07 / 07</span></div>
+      </div>
+      <div class="clip layer" id="c-headline" data-start="0" data-duration="17.4" data-track-index="1">
+        <div class="headline" id="headline"><div class="hl"><span class="hl-text">Нужен <em>юрист</em>?</span></div><div class="hl"><span class="hl-text">Все юристы — <em>в одном</em> приложении</span></div><div class="hl"><span class="hl-text">Найдите <em>своего</em> специалиста</span></div><div class="hl"><span class="hl-text">Фильтры — по делу <em>и региону</em></span></div><div class="hl"><span class="hl-text">Запишитесь <em>в пару касаний</em></span></div><div class="hl"><span class="hl-text">Готово. Юрист <em>уже в курсе</em></span></div></div>
+      </div>
+      <div class="clip layer" id="c-phone" data-start="0" data-duration="17.5" data-track-index="2">
+        <div class="rig"><div class="cam"><div class="phone" id="phone"><i class="side act"></i><i class="side vu"></i><i class="side vd"></i><i class="side pw"></i><div class="bezel"><div class="screen"><div class="view" id="v-splash" data-layout-allow-overflow style="display:flex;align-items:center;justify-content:center;flex-direction:column;"><div class="logo split" id="splash-logo" style="font-size:150px;">MYLEX</div><div id="splash-sub" style="font-size:28px;color:#645E73;margin-top:18px;letter-spacing:.14em;text-transform:uppercase;">юридические услуги</div></div><div class="view" id="v-home" data-layout-allow-overflow><div class="appbar"><span class="logo">MYLEX</span><span class="iconbtn"><svg viewBox="0 0 24 24" fill="none" stroke="#4A3B63" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg></span></div><div class="search" style="top:228px;"><svg viewBox="0 0 24 24" fill="none" stroke="#4A3B63" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>Найти юриста или услугу</div><div class="stats" style="top:360px;"><div class="stat"><b>1200+</b><span>юристов</span></div><div class="stat-sep"></div><div class="stat"><b>40+</b><span>регионов</span></div><div class="stat-sep"></div><div class="stat"><b>4.9</b><span>рейтинг</span></div></div><div class="sec" style="top:568px;"><h3>Категории</h3><a>Все</a></div><div class="cats" style="top:640px;"><div class="cat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#4A3B63" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="7" r="3"/><circle cx="16.5" cy="8.5" r="2.5"/><path d="M2.5 20c0-3.6 2.5-6 5.5-6s5.5 2.4 5.5 6"/><path d="M13.5 15.2c.9-.8 1.9-1.2 3-1.2 2.6 0 4.5 2 4.5 5"/></svg></div><span>Семейное право</span></div><div class="cat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#4A3B63" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7"/><path d="M6 10v10h12V10"/><path d="M10 20v-5h4v5"/></svg></div><span>Недвижимость</span></div><div class="cat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#4A3B63" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M3 12h18"/></svg></div><span>Бизнес</span></div><div class="cat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#4A3B63" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M7 21h10"/><path d="M5 7h14"/><path d="M5 7l-3 7a3 3 0 0 0 6 0z"/><path d="M19 7l-3 7a3 3 0 0 0 6 0z"/></svg></div><span>Трудовые споры</span></div><div class="cat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#4A3B63" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h11a2 2 0 0 1 2 2v12"/><path d="M7 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2"/><path d="M9 8h7M9 12h7M9 16h4"/></svg></div><span>Наследство</span></div><div class="cat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#4A3B63" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg></div><span>Все услуги</span></div></div><div class="sec" style="top:1054px;"><h3>Рекомендуемые юристы</h3><a>Все →</a></div><div class="carousel" style="top:1126px;"><div class="lcard"><div class="avatar">АК</div><b>Алия Каримова</b><span class="tag">Семейное право</span><span class="rating"><i>★</i> 4.9 <small>(128)</small></span></div><div class="lcard"><div class="avatar">ТР</div><b>Тимур Рахимов</b><span class="tag">Семейное право</span><span class="rating"><i>★</i> 4.8 <small>(96)</small></span></div><div class="lcard"><div class="avatar">ДЮ</div><b>Дильноза Юсупова</b><span class="tag">Наследство</span><span class="rating"><i>★</i> 4.8 <small>(74)</small></span></div></div><div class="tabbar"><div class="tab on"><svg viewBox="0 0 24 24" fill="none" stroke="#4A3B63" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7"/><path d="M6 10v10h12V10"/><path d="M10 20v-5h4v5"/></svg>Главная</div><div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="#686476" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>Поиск</div><div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="#686476" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>Записи</div><div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="#686476" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="4"/><path d="M4.5 20c.8-3.6 3.8-5.5 7.5-5.5s6.7 1.9 7.5 5.5"/></svg>Профиль</div></div></div><div class="view" id="v-search" data-layout-allow-overflow><div class="backrow"><span class="iconbtn"><svg viewBox="0 0 24 24" fill="none" stroke="#4A3B63" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></span><h2>Поиск</h2></div><div class="search active" style="top:236px;"><svg viewBox="0 0 24 24" fill="none" stroke="#4A3B63" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><span><span class="typed">семейный юрист</span><i class="caret"></i></span></div><div style="position:absolute;left:44px;top:372px;" class="sublabel">Подсказки</div><div class="chips" style="top:420px;"><div class="chip">Семейное право</div><div class="chip">Развод и алименты</div><div class="chip">Брачный договор</div></div><div class="list" style="top:524px;"><div class="row"><svg viewBox="0 0 24 24" fill="none" stroke="#645E73" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><span><b>семейный юрист</b> <em>в Ташкенте</em></span></div><div class="row"><svg viewBox="0 0 24 24" fill="none" stroke="#645E73" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><span><b>семейный юрист</b> <em>онлайн</em></span></div></div><div class="kbd"><div class="krow"><div class=key>й</div><div class=key>ц</div><div class=key>у</div><div class=key>к</div><div class=key>е</div><div class=key>н</div><div class=key>г</div><div class=key>ш</div><div class=key>щ</div><div class=key>з</div><div class=key>х</div></div><div class="krow"><div class=key>ф</div><div class=key>ы</div><div class=key>в</div><div class=key>а</div><div class=key>п</div><div class=key>р</div><div class=key>о</div><div class=key>л</div><div class=key>д</div><div class=key>ж</div><div class=key>э</div></div><div class="krow"><div class="key w">⇧</div><div class=key>я</div><div class=key>ч</div><div class=key>с</div><div class=key>м</div><div class=key>и</div><div class=key>т</div><div class=key>ь</div><div class=key>б</div><div class=key>ю</div><div class="key w">⌫</div></div><div class="krow"><div class="key n">123</div><div class="key n">☺</div><div class="key sp">пробел</div><div class="key go">Найти</div></div><div class="sys"><svg viewBox="0 0 24 24" fill="none" stroke="#4d4a55" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.6 2.6 15.4 0 18M12 3c-2.6 2.6-2.6 15.4 0 18"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="#4d4a55" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg></div></div></div><div class="view" id="v-catalog" data-layout-allow-overflow><div data-layout-ignore class="backrow"><span class="iconbtn"><svg viewBox="0 0 24 24" fill="none" stroke="#4A3B63" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></span><h2>Каталог юристов</h2></div><div data-layout-ignore class="pills"><div class="pill">Тип услуги<svg style="width:26px;height:26px" viewBox="0 0 24 24" fill="none" stroke="#4A3B63" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10l5 5 5-5"/></svg></div><div class="pill on">Категория: семейное</div><div class="pill" id="pill-region"><span id="region-a">Регион</span><span id="region-b" style="display:none">Регион: Ташкент</span></div><div class="pill">Сортировка: по рейтингу</div></div><div data-layout-ignore class="count"><b>48 юристов</b> · семейное право</div><div data-layout-ignore class="pcards"><div class="pcard"><div class="avatar">АК</div><div class="body"><b>Алия Каримова</b><span class="spec">Семейное право</span><span class="rating"><i>★</i> 4.9 <small>(128 отзывов)</small></span><div class="meta"><span class="price">от 150 000 сум</span><span class="region">Ташкент</span></div></div></div><div class="pcard"><div class="avatar">ТР</div><div class="body"><b>Тимур Рахимов</b><span class="spec">Семейное право</span><span class="rating"><i>★</i> 4.8 <small>(96 отзывов)</small></span><div class="meta"><span class="price">от 120 000 сум</span><span class="region">Ташкент</span></div></div></div><div class="pcard"><div class="avatar">ДЮ</div><div class="body"><b>Дильноза Юсупова</b><span class="spec">Наследство</span><span class="rating"><i>★</i> 4.8 <small>(74 отзывов)</small></span><div class="meta"><span class="price">от 200 000 сум</span><span class="region">Самарканд</span></div></div></div></div><div class="scrim"></div><div class="sheet" data-layout-allow-overlap data-layout-allow-overflow><div class="handle"></div><h4>Регион</h4><div class="radio"><i></i>Ташкент</div><div class="radio"><i></i>Самарканд</div><div class="radio"><i></i>Бухара</div><div class="radio"><i></i>Фергана</div><div class="btn" style="margin-top:30px;">Применить</div></div></div><div class="view" id="v-profile" data-layout-allow-overflow><div data-layout-ignore class="appbar" style="top:112px;"><span class="iconbtn"><svg viewBox="0 0 24 24" fill="none" stroke="#4A3B63" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></span><span class="iconbtn"><svg viewBox="0 0 24 24" fill="none" stroke="#4A3B63" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></span></div><div data-layout-ignore class="prof"><div class="avatar">АК</div><h2>Алия Каримова</h2><div class="spec">Семейное право · Ташкент</div><div class="rating"><i>★</i> 4.9 <small>· 128 отзывов</small></div></div><div data-layout-ignore class="bio">Разводы, алименты, раздел имущества. Помогаю договориться без суда.</div><div data-layout-ignore class="schips"><div class="schip">120 дел</div><div class="schip">8 лет опыта</div><div class="schip">Ответ за 15 мин</div></div><div data-layout-ignore class="btn" style="position:absolute;left:44px;right:44px;top:914px;">Забронировать консультацию</div><div class="scrim"></div><div class="sheet" data-layout-allow-overlap data-layout-allow-overflow><div class="handle"></div><h4>Выберите время</h4><div class="sublabel">Сентябрь – октябрь</div><div class="days"><div class="day on">Вт<b>29</b></div><div class="day">Ср<b>30</b></div><div class="day">Чт<b>1</b></div><div class="day">Пт<b>2</b></div></div><div class="sublabel">Время консультации</div><div class="slots"><div class="slot">10:00</div><div class="slot">12:30</div><div class="slot">15:00</div><div class="slot">17:00</div></div><div class="btn">Подтвердить</div></div></div><div class="view" id="v-confirm" data-layout-allow-overflow style="background:#FBFAFD;"><div class="chatfab"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 18l-1 3 4-2h9a3 3 0 0 0 3-3V8a3 3 0 0 0-3-3H7a3 3 0 0 0-3 3v7"/></svg></div><div class="okwrap"><div class="okcircle"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div><h2>Заявка отправлена юристу</h2><p>Юрист ответит в течение 15 минут</p></div><div class="okcard"><div class="avatar">АК</div><div><b>Алия Каримова</b><span>Вт, 29 сентября · 15:00</span></div></div><div class="btn ghost" style="position:absolute;left:44px;right:44px;top:1200px;">Перейти в чат</div></div><div class="avatar" id="fly-avatar">АК</div><div class="tap" id="tap1"></div><div class="tap" id="tap2"></div><div class="tap" id="tap3"></div><div class="tap" id="tap4"></div><div class="tap" id="tap5"></div><div class="tap" id="tap6"></div><div class="tap" id="tap7"></div><div class="tap" id="tap8"></div><div class="island"></div><div class="status"><span class="time">9:41</span><span class="icons"><svg viewBox="0 0 36 24"><rect x="0" y="16" width="6" height="8" rx="1.5" fill="#000"/><rect x="10" y="11" width="6" height="13" rx="1.5" fill="#000"/><rect x="20" y="6" width="6" height="18" rx="1.5" fill="#000"/><rect x="30" y="0" width="6" height="24" rx="1.5" fill="#000"/></svg><svg viewBox="0 0 34 24"><path d="M17 24l-5.2-6.2a8 8 0 0 1 10.4 0z" fill="#000"/><path d="M4.6 9.4a19 19 0 0 1 24.8 0l-3.3 3.9a14 14 0 0 0-18.2 0z" fill="#000"/><path d="M0 4.2a26 26 0 0 1 34 0" stroke="#000" stroke-width="4.4" fill="none" stroke-linecap="round" transform="translate(0 1)"/></svg><svg viewBox="0 0 54 24"><rect x="1" y="1" width="46" height="22" rx="7" fill="none" stroke="#000" stroke-opacity=".38" stroke-width="2"/><rect x="4.5" y="4.5" width="39" height="15" rx="4" fill="#000"/><path d="M50 8.5v7a3.5 3.5 0 0 0 0-7z" fill="#000" fill-opacity=".45"/></svg></span></div><div class="homebar"></div></div></div></div></div></div>
+      </div>
+      <div class="clip layer" id="c-brand" data-start="17.0" data-duration="3.0" data-track-index="3">
+        <div class="brandwrap"><div class="brand"><div class="logo">MYLEX</div><div class="bar"></div><div class="tagline">Юридическая помощь — в один клик</div><div class="url">mylex.uz</div></div><div class="powered">Powered by <img src="assets/brand/turgunov-mark.svg" alt=""><b>Turgunov Technologies</b></div></div>
+      </div>
+    </div>
+    <script>
+(function () {
+  const $ = (s) => document.querySelector(s);
+  const $$ = (s) => Array.from(document.querySelectorAll(s));
+  function split(el) {
+    const text = el.textContent; el.textContent = "";
+    return Array.from(text).map((c) => {
+      const s = document.createElement("span"); s.className = "ch";
+      s.textContent = c === " " ? " " : c; el.appendChild(s); return s;
+    });
+  }
+  // center of an element in .screen coordinates (layout offsets; unaffected by transforms)
+  function screenCenter(el) {
+    let x = 0, y = 0, n = el; const scr = $(".screen");
+    while (n && n !== scr) { x += n.offsetLeft; y += n.offsetTop; n = n.offsetParent; }
+    return { x: x + el.offsetWidth / 2, y: y + el.offsetHeight / 2 };
+  }
+  function tap(tl, id, target, t) {
+    const el = typeof target === "string" ? $(target) : target;
+    const c = screenCenter(el), ring = $("#tap" + id);
+    tl.set(ring, { left: c.x, top: c.y }, 0);
+    tl.fromTo(ring, { scale: 0.45, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.12, ease: "power2.out" }, t);
+    tl.to(ring, { scale: 1.45, opacity: 0, duration: 0.36, ease: "power2.out" }, t + 0.14);
+    tl.to(el, { scale: 0.95, duration: 0.09, ease: "power2.in" }, t);
+    tl.to(el, { scale: 1, duration: 0.3, ease: "back.out(3)" }, t + 0.09);
+  }
+
+  document.fonts.ready.then(function () {
+    const tl = gsap.timeline({ paused: true });
+
+    // ---------- ambient background (finite loops) ----------
+    tl.fromTo(".glow.a", { x: 0, y: 0, scale: 1 }, { x: 60, y: 40, scale: 1.08, duration: 5, ease: "sine.inOut", yoyo: true, repeat: 3 }, 0);
+    tl.fromTo(".glow.b", { x: 0, y: 0, scale: 1.05 }, { x: -70, y: -50, scale: 0.97, duration: 5, ease: "sine.inOut", yoyo: true, repeat: 3 }, 0);
+    tl.fromTo(".ghost-glyph", { y: 40, rotation: -2 }, { y: -60, rotation: 2, duration: 20, ease: "none" }, 0);
+    tl.fromTo(".rule", { scaleX: 0 }, { scaleX: 1, duration: 0.9, ease: "power3.out", transformOrigin: "0% 50%" }, 0.05);
+    tl.fromTo(".kicker", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5 }, 0.25);
+
+    // headline swaps (out-up / in-up) + step counter
+    const hls = $$(".hl"), steps = $$(".steps span");
+    const hlT = [0.3, 2.3, 5.7, 8.5, 11.5, 14.7];
+    hls.forEach((h, i) => {
+      tl.fromTo(h, { opacity: 0, y: 36 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, hlT[i]);
+      const out = i < hls.length - 1 ? hlT[i + 1] - 0.22 : 16.9;
+      tl.to(h, { opacity: 0, y: -30, duration: 0.25, ease: "power2.in" }, out);
+    });
+    const stT = [0.25, 2.2, 5.6, 8.4, 11.4, 14.6, 17.0];
+    steps.forEach((s, i) => { tl.set(s, { opacity: 1 }, stT[i]); if (i < steps.length - 1) tl.set(s, { opacity: 0 }, stT[i + 1]); });
+
+    // ---------- 01 splash 0–2.2 ----------
+    tl.fromTo(".rig", { y: 1650 }, { y: 0, duration: 0.95, ease: "power3.out" }, 0.05);
+    const logoCh = split($("#splash-logo"));
+    tl.fromTo(logoCh, { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "back.out(2)", stagger: 0.06 }, 0.55);
+    tl.fromTo("#splash-sub", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4 }, 1.05);
+    tl.to("#splash-sub", { opacity: 0, duration: 0.2 }, 1.65);
+    // logo shrinks into the app header (bridge into 02)
+    const from = screenCenter($("#splash-logo")), to = screenCenter($("#v-home .appbar .logo"));
+    tl.to("#splash-logo", { x: to.x - from.x, y: to.y - from.y, scale: 52 / 150, duration: 0.55, ease: "power3.inOut" }, 1.65);
+    tl.set("#v-home", { opacity: 1 }, 2.2);
+    tl.set("#v-splash", { opacity: 0 }, 2.2);
+
+    // ---------- 02 home 2.2–5.6 ----------
+    tl.fromTo("#v-home .appbar .iconbtn", { scale: 0 }, { scale: 1, duration: 0.4, ease: "back.out(2.5)" }, 2.2);
+    tl.fromTo("#v-home .search", { y: -40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "power3.out" }, 2.22);
+    tl.fromTo("#v-home .tabbar", { y: 170 }, { y: 0, duration: 0.5, ease: "power3.out" }, 2.25);
+    tl.fromTo("#v-home .stats", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 2.35);
+    const statEls = $$("#v-home .stat b");
+    [[1200, "+", 0], [40, "+", 0], [4.9, "", 1]].forEach(([end, suf, dec], i) => {
+      const o = { v: 0 }, el = statEls[i];
+      tl.fromTo(o, { v: 0 }, { v: end, duration: 1.0, ease: "power2.out",
+        onUpdate: () => { el.textContent = (dec ? o.v.toFixed(1) : Math.round(o.v)) + suf; } }, 2.35);
+    });
+    tl.fromTo("#v-home .sec", { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.4, stagger: 0.5 }, 2.75);
+    tl.fromTo("#v-home .cat", { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(1.8)", stagger: 0.07 }, 2.85);
+    tl.fromTo("#v-home .lcard", { x: 420, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power3.out", stagger: 0.1 }, 3.35);
+    tap(tl, 1, "#v-home .search", 5.3);
+
+    // ---------- 03 search 5.6–8.4 ----------
+    tl.set("#v-search", { opacity: 1 }, 5.6);
+    tl.set("#v-home", { opacity: 0 }, 5.6);
+    tl.fromTo("#v-search .kbd", { y: 640 }, { y: 0, duration: 0.42, ease: "power3.out" }, 5.65);
+    const typed = split($("#v-search .typed"));
+    typed.forEach((c, i) => tl.set(c, { display: "inline" }, 6.1 + i * 0.07));
+    tl.fromTo(["#v-search .sublabel", "#v-search .chip", "#v-search .row"], { opacity: 0, y: 16 },
+      { opacity: 1, y: 0, duration: 0.3, ease: "power2.out", stagger: 0.06 }, 6.75);
+    const chip = $("#v-search .chip");
+    tap(tl, 2, chip, 7.55);
+    tl.set(chip, { attr: { class: "chip on" } }, 7.62);
+    tl.to("#v-search .kbd", { y: 640, duration: 0.3, ease: "power2.in" }, 8.05);
+
+    // ---------- 04 catalog 8.4–11.4 (iOS push, right → left) ----------
+    tl.fromTo("#v-catalog", { x: 776, opacity: 1 }, { x: 0, opacity: 1, duration: 0.5, ease: "power3.inOut" }, 8.3);
+    tl.to("#v-search", { x: -230, opacity: 0.35, duration: 0.5, ease: "power3.inOut" }, 8.3);
+    tl.set("#v-search", { opacity: 0 }, 8.8);
+    tl.fromTo("#v-catalog .pill", { x: 60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.35, stagger: 0.06, ease: "power2.out" }, 8.7);
+    tl.fromTo("#v-catalog .count", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 8.9);
+    tl.fromTo("#v-catalog .pcard", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, stagger: 0.09, ease: "power3.out" }, 8.9);
+    tl.set(["#v-catalog .scrim"], { opacity: 0 }, 0);
+    tl.set(["#v-catalog .sheet"], { yPercent: 100 }, 0);
+    tap(tl, 3, "#pill-region", 9.65);
+    tl.to("#v-catalog .scrim", { opacity: 1, duration: 0.3 }, 9.8);
+    tl.to("#v-catalog .sheet", { yPercent: 0, duration: 0.42, ease: "power3.out" }, 9.8);
+    const radio = $("#v-catalog .radio");
+    tap(tl, 4, radio, 10.3);
+    tl.set(radio, { attr: { class: "radio on" } }, 10.36);
+    tap(tl, 5, "#v-catalog .sheet .btn", 10.7);
+    tl.to("#v-catalog .sheet", { yPercent: 100, duration: 0.35, ease: "power2.in" }, 10.9);
+    tl.to("#v-catalog .scrim", { opacity: 0, duration: 0.3 }, 10.95);
+    tl.set("#region-a", { display: "none" }, 11.05);
+    tl.set("#region-b", { display: "inline" }, 11.05);
+    tl.set("#pill-region", { attr: { class: "pill on" } }, 11.05);
+
+    // ---------- 05 profile 11.4–14.6 (shared avatar) ----------
+    const card = $("#v-catalog .pcard"), cardAv = card.querySelector(".avatar");
+    tap(tl, 6, card, 11.25);
+    const a0 = screenCenter(cardAv), a1 = screenCenter($("#fly-avatar"));
+    tl.set("#v-profile .prof .avatar", { opacity: 0 }, 0);
+    tl.set("#fly-avatar", { opacity: 1 }, 11.45);
+    tl.fromTo("#fly-avatar", { x: a0.x - a1.x, y: a0.y - a1.y, scale: 150 / 210, borderRadius: 42 },
+      { x: 0, y: 0, scale: 1, borderRadius: 105, duration: 0.55, ease: "power3.inOut" }, 11.45);
+    tl.set(cardAv, { opacity: 0 }, 11.45);
+    tl.to("#v-catalog", { x: -230, opacity: 0, duration: 0.5, ease: "power3.inOut" }, 11.45);
+    tl.fromTo("#v-profile", { opacity: 0 }, { opacity: 1, duration: 0.35 }, 11.5);
+    tl.set("#v-profile .prof .avatar", { opacity: 1 }, 12.0);
+    tl.set("#fly-avatar", { opacity: 0 }, 12.0);
+    tl.fromTo(["#v-profile .prof h2", "#v-profile .prof .spec", "#v-profile .prof .rating"], { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.35, stagger: 0.07, ease: "power2.out" }, 11.8);
+    tl.fromTo("#v-profile .bio", { opacity: 0 }, { opacity: 1, duration: 0.35 }, 12.05);
+    tl.fromTo("#v-profile .schip", { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, stagger: 0.07, ease: "back.out(2)" }, 12.15);
+    tl.fromTo("#v-profile > .btn", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, 12.3);
+    tl.set("#v-profile .scrim", { opacity: 0 }, 0);
+    tl.set("#v-profile .sheet", { yPercent: 100 }, 0);
+    tap(tl, 7, "#v-profile > .btn", 12.8);
+    tl.to("#v-profile .scrim", { opacity: 1, duration: 0.3 }, 12.95);
+    tl.to("#v-profile .sheet", { yPercent: 0, duration: 0.45, ease: "power3.out" }, 12.95);
+    tl.fromTo("#v-profile .day", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, stagger: 0.05 }, 13.2);
+    tl.fromTo("#v-profile .slot", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, stagger: 0.05 }, 13.35);
+    const slot = $$("#v-profile .slot")[2];
+    tap(tl, 8, slot, 13.85);
+    tl.set(slot, { attr: { class: "slot on" } }, 13.91);
+    // "Подтвердить" press (reuse ring 1, long finished by now)
+    const confirmBtn = $("#v-profile .sheet .btn");
+    const cb = screenCenter(confirmBtn);
+    tl.set("#tap1", { left: cb.x, top: cb.y }, 14.3);
+    tl.fromTo("#tap1", { scale: 0.45, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.12 }, 14.35);
+    tl.to("#tap1", { scale: 1.45, opacity: 0, duration: 0.36 }, 14.49);
+    tl.to(confirmBtn, { scale: 0.95, duration: 0.09 }, 14.35);
+    tl.to(confirmBtn, { scale: 1, duration: 0.3, ease: "back.out(3)" }, 14.44);
+
+    // ---------- 06 confirm 14.6–17.0 ----------
+    tl.fromTo("#v-confirm", { opacity: 0, scale: 0.98 }, { opacity: 1, scale: 1, duration: 0.35, ease: "power2.out" }, 14.6);
+    tl.set("#v-profile", { opacity: 0 }, 14.95);
+    tl.fromTo("#v-confirm .okcircle", { scale: 0 }, { scale: 1, duration: 0.55, ease: "back.out(2.2)" }, 14.75);
+    tl.to("#v-confirm .okcircle svg path", { strokeDashoffset: 0, duration: 0.45, ease: "power2.inOut" }, 15.05);
+    tl.fromTo(["#v-confirm .okwrap h2", "#v-confirm .okwrap p"], { opacity: 0, y: 24 },
+      { opacity: 1, y: 0, duration: 0.4, stagger: 0.1, ease: "power3.out" }, 15.3);
+    tl.fromTo("#v-confirm .okcard", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 15.6);
+    tl.fromTo("#v-confirm > .btn", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 15.75);
+    tl.fromTo("#v-confirm .chatfab", { scale: 0 }, { scale: 1, duration: 0.4, ease: "back.out(2.5)" }, 15.4);
+    tl.to("#v-confirm .chatfab", { scale: 1.14, duration: 0.35, ease: "sine.inOut", yoyo: true, repeat: 3 }, 15.9);
+    tl.fromTo(".cam", { scale: 1 }, { scale: 1.03, duration: 0.7, ease: "power2.out" }, 15.0);
+
+    // ---------- 07 brand 17.0–20.0 ----------
+    tl.to(".rig", { y: 1750, duration: 0.55, ease: "power2.in" }, 16.85);
+    const bl = split($(".brand .logo"));
+    tl.fromTo(bl, { y: 90, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "back.out(2)", stagger: 0.07 }, 17.3);
+    tl.fromTo(".brand .bar", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power3.out" }, 17.85);
+    tl.fromTo(".brand .tagline", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 18.05);
+    tl.fromTo(".brand .url", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 18.3);
+    tl.fromTo(".powered", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, 18.55);
+
+    window.__timelines["main"] = tl;
+    if (window.__hfForceTimelineRebind) window.__hfForceTimelineRebind();
+  });
+})();
+</script>
+  </body>
+</html>
