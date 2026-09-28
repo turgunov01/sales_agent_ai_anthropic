@@ -48,7 +48,7 @@ CSS = """
   background:radial-gradient(circle,rgba(106,87,144,.30) 0%,rgba(106,87,144,0) 68%);}
 .glow.b{width:1100px;height:1100px;right:-460px;bottom:-300px;
   background:radial-gradient(circle,rgba(74,59,99,.26) 0%,rgba(74,59,99,0) 68%);}
-.ghost{position:absolute;left:640px;top:980px;font-family:'MxSerif';font-weight:700;font-size:1100px;
+.ghost-glyph{position:absolute;left:640px;top:980px;font-family:'MxSerif';font-weight:700;font-size:1100px;
   line-height:1;color:rgba(74,59,99,.07);pointer-events:none;}
 .rule{position:absolute;left:90px;right:90px;top:92px;height:3px;background:rgba(74,59,99,.22);}
 .kicker{position:absolute;left:90px;top:112px;font-size:24px;font-weight:600;letter-spacing:.18em;
@@ -88,7 +88,7 @@ CSS = """
 /* iOS tab bar */
 .tabbar{position:absolute;left:0;right:0;bottom:0;height:168px;background:rgba(250,249,252,.96);
   border-top:2px solid rgba(46,42,56,.08);display:flex;justify-content:space-around;padding-top:16px;z-index:18;}
-.tab{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:20px;font-weight:500;color:#8E8A99;width:150px;}
+.tab{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:20px;font-weight:500;color:#686476;width:150px;}
 .tab svg{width:46px;height:46px;}
 .tab.on{color:#4A3B63;}
 .view{position:absolute;inset:0;}
@@ -133,7 +133,7 @@ CSS = """
 .tag{display:inline-block;align-self:flex-start;padding:8px 16px;border-radius:14px;background:#E7E1F0;color:#4A3B63;
   font-size:22px;font-weight:600;}
 .rating{font-size:24px;font-weight:600;color:#2E2A38;}
-.rating i{font-style:normal;color:#C9962E;}
+.rating i{font-style:normal;color:#9A7216;}
 .rating small{color:#645E73;font-weight:400;font-size:22px;}
 
 /* search screen */
@@ -158,7 +158,7 @@ CSS = """
 .kbd .sys{display:flex;justify-content:space-between;padding:4px 44px 0;}
 .kbd .sys svg{width:48px;height:48px;}
 .tap{position:absolute;width:120px;height:120px;margin:-60px 0 0 -60px;border-radius:50%;
-  border:6px solid #4A3B63;background:rgba(74,59,99,.16);z-index:30;}
+  border:5px solid rgba(74,59,99,.85);background:rgba(74,59,99,.10);z-index:30;}
 
 /* catalog */
 .pills{position:absolute;left:44px;top:236px;display:flex;gap:14px;white-space:nowrap;}
@@ -195,7 +195,7 @@ CSS = """
 .prof h2{font-family:'MxSerif';font-weight:700;font-size:54px;}
 .prof .spec{font-size:28px;color:#645E73;margin-top:8px;}
 .prof .rating{margin-top:12px;font-size:28px;}
-.bio{position:absolute;left:44px;right:44px;top:680px;font-size:27px;line-height:1.45;color:#4d4760;text-align:center;}
+.bio{position:absolute;left:110px;right:110px;top:680px;font-size:27px;line-height:1.45;color:#4d4760;text-align:center;}
 .schips{position:absolute;left:44px;right:44px;top:800px;display:flex;justify-content:center;gap:14px;}
 .schip{height:70px;padding:0 22px;border-radius:22px;background:#fff;box-shadow:0 6px 18px rgba(74,59,99,.08);
   display:flex;align-items:center;font-size:25px;font-weight:600;color:#4A3B63;}
@@ -216,7 +216,7 @@ CSS = """
 .okcircle{width:250px;height:250px;border-radius:50%;background:#4A3B63;margin:0 auto 50px;display:flex;
   align-items:center;justify-content:center;box-shadow:0 0 0 26px #E7E1F0,0 24px 60px rgba(74,59,99,.35);}
 .okcircle svg{width:130px;height:130px;}
-.okwrap h2{font-family:'MxSerif';font-weight:700;font-size:56px;line-height:1.12;}
+.okwrap h2{font-family:'MxSerif';font-weight:700;font-size:56px;line-height:1.12;max-width:560px;margin:0 auto;}
 .okwrap p{font-size:29px;color:#645E73;margin-top:22px;line-height:1.45;}
 .okcard{position:absolute;left:44px;right:44px;top:1010px;border-radius:32px;background:#fff;padding:30px 34px;
   display:flex;align-items:center;gap:26px;box-shadow:0 10px 28px rgba(74,59,99,.09);}
@@ -297,7 +297,7 @@ def chrome():
 def tabbar(active=0):
     items = [("home", "Главная"), ("search", "Поиск"), ("cal", "Записи"), ("user", "Профиль")]
     return '<div class="tabbar">' + "".join(
-        f'<div class="tab{" on" if i == active else ""}">{icon(n, "#4A3B63" if i == active else "#8E8A99")}{t}</div>'
+        f'<div class="tab{" on" if i == active else ""}">{icon(n, "#4A3B63" if i == active else "#686476")}{t}</div>'
         for i, (n, t) in enumerate(items)) + "</div>"
 
 
@@ -306,7 +306,7 @@ def stage(headline, inner_screen, kicker="MYLEX · демо", step="", phone=Tru
           f'<i class="side pw"></i><div class="bezel"><div class="screen">{inner_screen}{chrome()}</div></div></div>'
           if phone else "")
     hl = f'<div class="headline" id="headline"><span class="hl-text">{headline}</span></div>' if headline else ""
-    return (f'<div class="stage"><div class="glow a"></div><div class="glow b"></div><div class="ghost">§</div>'
+    return (f'<div class="stage"><div class="glow a"></div><div class="glow b"></div><div class="ghost-glyph" data-layout-ignore>§</div>'
             f'<div class="rule"></div><div class="kicker">{kicker}</div><div class="kicker-r">{step}</div>'
             f'{hl}{ph}{extra}</div>')
 
@@ -413,7 +413,7 @@ def scr_profile(sheet=True):
         f'<span class="iconbtn">{icon("heart")}</span></div>'
         f'<div class="prof"><div class="avatar">{a}</div><h2>{n}</h2><div class="spec">{s} · {g}</div>'
         f'<div class="rating"><i>★</i> {r} <small>· {c} отзывов</small></div></div>'
-        '<div class="bio">Разводы, алименты, раздел имущества.<br>Помогаю договориться без суда.</div>'
+        '<div class="bio">Разводы, алименты, раздел имущества. Помогаю договориться без суда.</div>'
         f'<div class="schips">{chips}</div>'
         '<div class="btn" style="position:absolute;left:44px;right:44px;top:914px;">Забронировать консультацию</div>'
         f'{sheet_html}</div>')
@@ -425,7 +425,7 @@ def scr_confirm():
         '<div class="view" style="background:#FBFAFD;">'
         f'<div class="chatfab">{icon("chat", "#fff")}</div>'
         f'<div class="okwrap"><div class="okcircle">{svg(IC["check"], "#fff", 2.6)}</div>'
-        '<h2>Заявка отправлена<br>юристу</h2><p>Юрист ответит в течение 15 минут</p></div>'
+        '<h2>Заявка отправлена юристу</h2><p>Юрист ответит в течение 15 минут</p></div>'
         f'<div class="okcard"><div class="avatar">{a}</div><div><b>{n}</b>'
         '<span>Вт, 29 сентября · 15:00</span></div></div>'
         '<div class="btn ghost" style="position:absolute;left:44px;right:44px;top:1200px;">Перейти в чат</div>'

@@ -44,7 +44,7 @@ version: 1
 - duration: 2.2s
 - poster: 1.4s
 - transition_in: cut
-- status: built
+- status: animated
 - src: compositions/01-splash.html
 - blueprint: logo-assemble-lockup + device-surface-showcase (establish)
 - rules: waterfall-entry, card-morph-anchor, sine-wave-loop
@@ -62,7 +62,7 @@ Why: хук на языке выгоды — вопрос зрителя, и с�
 - duration: 3.4s
 - poster: 2.6s
 - transition_in: cut
-- status: built
+- status: animated
 - src: compositions/02-home.html
 - blueprint: device-surface-showcase (stepwise-flow)
 - rules: counting-dynamic-scale, spring-pop-entrance, waterfall-entry
@@ -81,7 +81,7 @@ Why: масштаб и доверие — показывает, что выбо�
 - duration: 2.8s
 - poster: 1.9s
 - transition_in: cut
-- status: built
+- status: animated
 - src: compositions/03-search.html
 - blueprint: prompt-type-submit-generate (query form)
 - rules: cursor-click-ripple (касание без курсора), discrete-text-sequence, anchored-layout-expand
@@ -98,7 +98,7 @@ Why: показывает, что найти нужного юриста — э�
 - duration: 3.0s
 - poster: 1.6s
 - transition_in: slide-left (внутри экрана)
-- status: built
+- status: animated
 - src: compositions/04-catalog.html
 - blueprint: device-surface-showcase (stepwise-flow)
 - rules: spring-pop-entrance, anchored-layout-expand, press-release-spring
@@ -116,7 +116,7 @@ Why: доказательство, что выбор управляемый — 
 - duration: 3.2s
 - poster: 2.6s
 - transition_in: shared-element zoom (аватар)
-- status: built
+- status: animated
 - src: compositions/05-profile.html
 - blueprint: device-surface-showcase (stepwise-flow)
 - rules: card-morph-anchor, press-release-spring, anchored-layout-expand, spring-pop-entrance
@@ -135,7 +135,7 @@ Why: сама запись — центр обещания «в один кли�
 - duration: 2.4s
 - poster: 1.6s
 - transition_in: cut
-- status: built
+- status: animated
 - src: compositions/06-confirm.html
 - blueprint: device-surface-showcase (stepwise-flow, commit)
 - rules: press-release-spring, svg-path-draw, spring-pop-entrance, multi-phase-camera (микро-наезд на коммите)
@@ -152,7 +152,7 @@ Why: развязка — результат, ради которого всё �
 - duration: 3.0s
 - poster: 2.2s
 - transition_in: phone exit down
-- status: built
+- status: animated
 - src: compositions/07-brand.html
 - blueprint: logo-assemble-lockup (brand outro)
 - rules: waterfall-entry, spring-pop-entrance, sine-wave-loop
