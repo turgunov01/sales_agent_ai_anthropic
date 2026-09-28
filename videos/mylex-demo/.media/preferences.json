@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "preferences": {
+    "destination": {
+      "value": "reels",
+      "confirmed_in": [
+        "mylex-demo"
+      ],
+      "updated_at": "2026-09-28T06:15:58.466Z"
+    },
+    "aspect": {
+      "value": "1080x1920",
+      "confirmed_in": [
+        "mylex-demo"
+      ],
+      "updated_at": "2026-09-28T06:15:58.523Z"
+    },
+    "language": {
+      "value": "ru",
+      "confirmed_in": [
+        "mylex-demo"
+      ],
+      "updated_at": "2026-09-28T06:15:58.574Z"
+    },
+    "flow": {
+      "value": "companion",
+      "confirmed_in": [
+        "mylex-demo"
+      ],
+      "updated_at": "2026-09-28T06:15:58.627Z"
+    },
+    "storyboard": {
+      "value": "yes",
+      "confirmed_in": [
+        "mylex-demo"
+      ],
+      "updated_at": "2026-09-28T06:15:58.678Z"
+    }
+  },
+  "sightings": {}
+}
