@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>MYLEX — сториборд v1</title>
+<style>
+@font-face{font-family:'MxSerif';font-weight:400;font-style:normal;font-display:block;src:url('assets/fonts/PTSerif-400-cyrillic.woff2') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+@font-face{font-family:'MxSerif';font-weight:400;font-style:normal;font-display:block;src:url('assets/fonts/PTSerif-400-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face{font-family:'MxSerif';font-weight:700;font-style:normal;font-display:block;src:url('assets/fonts/PTSerif-700-cyrillic.woff2') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+@font-face{font-family:'MxSerif';font-weight:700;font-style:normal;font-display:block;src:url('assets/fonts/PTSerif-700-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face{font-family:'MxSans';font-weight:400;font-style:normal;font-display:block;src:url('assets/fonts/Inter-400-cyrillic.woff2') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+@font-face{font-family:'MxSans';font-weight:400;font-style:normal;font-display:block;src:url('assets/fonts/Inter-400-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face{font-family:'MxSans';font-weight:500;font-style:normal;font-display:block;src:url('assets/fonts/Inter-500-cyrillic.woff2') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+@font-face{font-family:'MxSans';font-weight:500;font-style:normal;font-display:block;src:url('assets/fonts/Inter-500-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face{font-family:'MxSans';font-weight:600;font-style:normal;font-display:block;src:url('assets/fonts/Inter-600-cyrillic.woff2') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+@font-face{font-family:'MxSans';font-weight:600;font-style:normal;font-display:block;src:url('assets/fonts/Inter-600-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face{font-family:'MxSans';font-weight:700;font-style:normal;font-display:block;src:url('assets/fonts/Inter-700-cyrillic.woff2') format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+@font-face{font-family:'MxSans';font-weight:700;font-style:normal;font-display:block;src:url('assets/fonts/Inter-700-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+
+.stage{position:absolute;inset:0;width:1080px;height:1920px;overflow:hidden;background:#F4F1F8;
+  font-family:'MxSans',system-ui,sans-serif;color:#2E2A38;}
+.glow{position:absolute;border-radius:50%;pointer-events:none;}
+.glow.a{width:980px;height:980px;left:-360px;top:-260px;
+  background:radial-gradient(circle,rgba(106,87,144,.30) 0%,rgba(106,87,144,0) 68%);}
+.glow.b{width:1100px;height:1100px;right:-460px;bottom:-300px;
+  background:radial-gradient(circle,rgba(74,59,99,.26) 0%,rgba(74,59,99,0) 68%);}
+.ghost{position:absolute;left:640px;top:980px;font-family:'MxSerif';font-weight:700;font-size:1100px;
+  line-height:1;color:rgba(74,59,99,.07);pointer-events:none;}
+.rule{position:absolute;left:90px;right:90px;top:92px;height:3px;background:rgba(74,59,99,.22);}
+.kicker{position:absolute;left:90px;top:112px;font-size:24px;font-weight:600;letter-spacing:.18em;
+  color:#4A3B63;text-transform:uppercase;}
+.kicker-r{position:absolute;right:90px;top:112px;font-size:24px;font-weight:600;letter-spacing:.12em;color:#645E73;}
+.headline{position:absolute;left:70px;right:70px;top:168px;height:150px;display:flex;align-items:center;
+  justify-content:center;text-align:center;font-family:'MxSerif';font-weight:700;font-size:66px;
+  line-height:1.08;color:#2E2A38;}
+.headline em{font-style:normal;color:#4A3B63;}
+
+/* phone */
+.phone{position:absolute;left:130px;top:340px;width:820px;height:1772px;border-radius:118px;
+  background:#2E2A38;padding:22px;
+  box-shadow:0 60px 120px rgba(46,42,56,.28),0 18px 40px rgba(74,59,99,.22),inset 0 0 0 3px #4a4458;}
+.screen{position:relative;width:776px;height:1728px;border-radius:96px;overflow:hidden;background:#F4F1F8;}
+.island{position:absolute;left:50%;top:22px;width:230px;height:66px;margin-left:-115px;border-radius:40px;
+  background:#15131B;z-index:20;}
+.status{position:absolute;left:0;right:0;top:0;height:108px;padding:34px 66px 0;display:flex;
+  justify-content:space-between;font-size:30px;font-weight:600;color:#2E2A38;z-index:19;}
+.status .icons{display:flex;gap:12px;align-items:center;}
+.status .icons i{display:block;width:34px;height:20px;border-radius:6px;background:#2E2A38;}
+.status .icons i.s{width:28px;background:none;border-bottom:20px solid #2E2A38;border-left:28px solid transparent;
+  height:0;border-radius:0;}
+.view{position:absolute;inset:0;}
+
+/* app parts */
+.appbar{position:absolute;left:44px;right:44px;top:120px;height:84px;display:flex;align-items:center;
+  justify-content:space-between;}
+.logo{font-family:'MxSerif';font-weight:700;color:#4A3B63;letter-spacing:.04em;}
+.appbar .logo{font-size:52px;}
+.iconbtn{width:76px;height:76px;border-radius:38px;background:#fff;display:flex;align-items:center;
+  justify-content:center;box-shadow:0 6px 18px rgba(74,59,99,.10);}
+.iconbtn svg{width:38px;height:38px;}
+.avatar{border-radius:50%;background:#E7E1F0;color:#4A3B63;font-family:'MxSerif';font-weight:700;
+  display:flex;align-items:center;justify-content:center;}
+.search{position:absolute;left:44px;right:44px;height:100px;border-radius:30px;background:#fff;
+  display:flex;align-items:center;gap:20px;padding:0 30px;font-size:30px;color:#645E73;
+  box-shadow:0 10px 30px rgba(74,59,99,.10);}
+.search svg{width:40px;height:40px;flex:none;}
+.search.active{border:3px solid #4A3B63;color:#2E2A38;}
+.caret{display:inline-block;width:3px;height:38px;background:#4A3B63;vertical-align:middle;margin-left:2px;}
+.stats{position:absolute;left:44px;right:44px;height:170px;border-radius:32px;background:#4A3B63;
+  display:flex;align-items:center;justify-content:space-around;color:#fff;
+  box-shadow:0 18px 40px rgba(74,59,99,.30);}
+.stat{text-align:center;}
+.stat b{display:block;font-family:'MxSerif';font-weight:700;font-size:54px;line-height:1.05;}
+.stat span{font-size:24px;color:#E3DCF0;}
+.stat-sep{width:2px;height:90px;background:rgba(255,255,255,.22);}
+.sec{position:absolute;left:44px;right:44px;display:flex;justify-content:space-between;align-items:baseline;}
+.sec h3{font-family:'MxSerif';font-weight:700;font-size:38px;color:#2E2A38;}
+.sec a{font-size:26px;font-weight:600;color:#4A3B63;}
+.cats{position:absolute;left:44px;right:44px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.cat{height:176px;border-radius:32px;background:#fff;box-shadow:0 8px 24px rgba(74,59,99,.08);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:0 10px;}
+.cat .ic{width:76px;height:76px;border-radius:24px;background:#E7E1F0;display:flex;align-items:center;justify-content:center;}
+.cat .ic svg{width:42px;height:42px;}
+.cat span{font-size:24px;font-weight:600;line-height:1.15;text-align:center;color:#2E2A38;}
+.carousel{position:absolute;left:44px;display:flex;gap:22px;}
+.lcard{width:300px;height:330px;border-radius:32px;background:#fff;box-shadow:0 10px 28px rgba(74,59,99,.10);
+  padding:28px;display:flex;flex-direction:column;gap:10px;flex:none;}
+.lcard .avatar{width:104px;height:104px;font-size:40px;}
+.lcard b{font-size:28px;font-weight:600;line-height:1.2;margin-top:8px;}
+.tag{display:inline-block;align-self:flex-start;padding:8px 16px;border-radius:14px;background:#E7E1F0;color:#4A3B63;
+  font-size:22px;font-weight:600;}
+.rating{font-size:24px;font-weight:600;color:#2E2A38;}
+.rating i{font-style:normal;color:#C9962E;}
+.rating small{color:#645E73;font-weight:400;font-size:22px;}
+
+/* search screen */
+.backrow{position:absolute;left:44px;right:44px;top:124px;display:flex;align-items:center;gap:20px;}
+.backrow h2{font-family:'MxSerif';font-weight:700;font-size:46px;}
+.chips{position:absolute;left:44px;right:0;display:flex;gap:16px;flex-wrap:nowrap;}
+.chip{flex:none;height:72px;padding:0 28px;border-radius:36px;background:#fff;border:2px solid #E2DCEB;
+  display:flex;align-items:center;gap:10px;font-size:26px;font-weight:600;color:#2E2A38;}
+.chip.on{background:#4A3B63;border-color:#4A3B63;color:#fff;}
+.list{position:absolute;left:44px;right:44px;}
+.row{height:92px;display:flex;align-items:center;gap:22px;font-size:30px;color:#2E2A38;border-bottom:2px solid #E2DCEB;}
+.row svg{width:36px;height:36px;flex:none;}
+.row em{font-style:normal;color:#645E73;}
+.kbd{position:absolute;left:0;right:0;bottom:0;height:720px;background:#E4DFEC;padding:22px 10px 0;}
+.krow{display:flex;justify-content:center;gap:9px;margin-bottom:16px;}
+.key{width:62px;height:92px;border-radius:14px;background:#fff;display:flex;align-items:center;justify-content:center;
+  font-size:34px;color:#2E2A38;box-shadow:0 3px 0 rgba(46,42,56,.18);}
+.key.w{width:150px;font-size:24px;background:#CFC8DA;}
+.key.sp{width:380px;font-size:26px;color:#645E73;}
+.key.go{width:150px;background:#4A3B63;color:#fff;font-size:24px;}
+.tap{position:absolute;width:120px;height:120px;margin:-60px 0 0 -60px;border-radius:50%;
+  border:6px solid #4A3B63;background:rgba(74,59,99,.16);z-index:30;}
+
+/* catalog */
+.pills{position:absolute;left:44px;top:236px;display:flex;gap:14px;white-space:nowrap;}
+.pill{flex:none;height:68px;padding:0 24px;border-radius:34px;background:#fff;border:2px solid #E2DCEB;display:flex;
+  align-items:center;gap:8px;font-size:25px;font-weight:600;color:#2E2A38;}
+.pill.on{border-color:#4A3B63;color:#4A3B63;background:#EFEAF6;}
+.count{position:absolute;left:44px;top:334px;font-size:26px;color:#645E73;}
+.count b{color:#2E2A38;}
+.pcards{position:absolute;left:44px;right:44px;top:394px;display:flex;flex-direction:column;gap:22px;}
+.pcard{height:236px;border-radius:32px;background:#fff;box-shadow:0 10px 28px rgba(74,59,99,.09);padding:28px;
+  display:flex;gap:26px;}
+.pcard .avatar{width:150px;height:150px;border-radius:30px;font-size:52px;flex:none;}
+.pcard .body{display:flex;flex-direction:column;gap:8px;flex:1;min-width:0;}
+.pcard b{font-size:32px;font-weight:600;}
+.pcard .spec{font-size:25px;color:#645E73;}
+.pcard .meta{display:flex;justify-content:space-between;align-items:center;margin-top:6px;}
+.price{font-size:26px;font-weight:700;color:#4A3B63;}
+.region{font-size:22px;font-weight:600;color:#645E73;padding:6px 14px;border-radius:12px;background:#F4F1F8;}
+.sheet{position:absolute;left:0;right:0;bottom:0;border-radius:48px 48px 0 0;background:#fff;
+  box-shadow:0 -20px 60px rgba(46,42,56,.18);padding:22px 48px 200px;}
+.handle{width:90px;height:10px;border-radius:5px;background:#D6CFE0;margin:0 auto 26px;}
+.sheet h4{font-family:'MxSerif';font-weight:700;font-size:40px;margin-bottom:14px;}
+.radio{height:88px;display:flex;align-items:center;gap:22px;font-size:30px;border-bottom:2px solid #EFEAF6;}
+.radio i{width:40px;height:40px;border-radius:50%;border:3px solid #B9B0C8;flex:none;}
+.radio.on i{border:12px solid #4A3B63;}
+.btn{height:104px;border-radius:32px;background:#4A3B63;color:#fff;font-size:30px;font-weight:600;display:flex;
+  align-items:center;justify-content:center;box-shadow:0 14px 30px rgba(74,59,99,.30);}
+.btn.ghost{background:#fff;color:#4A3B63;border:3px solid #4A3B63;box-shadow:none;}
+.scrim{position:absolute;inset:0;background:rgba(46,42,56,.32);}
+
+/* profile */
+.prof{position:absolute;left:44px;right:44px;top:210px;text-align:center;}
+.prof .avatar{width:210px;height:210px;font-size:76px;margin:0 auto 22px;box-shadow:0 0 0 10px #fff,0 14px 34px rgba(74,59,99,.20);}
+.prof h2{font-family:'MxSerif';font-weight:700;font-size:54px;}
+.prof .spec{font-size:28px;color:#645E73;margin-top:8px;}
+.prof .rating{margin-top:12px;font-size:28px;}
+.bio{position:absolute;left:44px;right:44px;top:680px;font-size:27px;line-height:1.45;color:#4d4760;text-align:center;}
+.schips{position:absolute;left:44px;right:44px;top:800px;display:flex;justify-content:center;gap:14px;}
+.schip{height:70px;padding:0 22px;border-radius:22px;background:#fff;box-shadow:0 6px 18px rgba(74,59,99,.08);
+  display:flex;align-items:center;font-size:25px;font-weight:600;color:#4A3B63;}
+.days{display:flex;gap:14px;margin:6px 0 24px;}
+.day{flex:1;height:112px;border-radius:26px;border:2px solid #E2DCEB;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;font-size:22px;color:#645E73;}
+.day b{font-size:34px;color:#2E2A38;}
+.day.on{background:#4A3B63;border-color:#4A3B63;color:#E3DCF0;}
+.day.on b{color:#fff;}
+.slots{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px;}
+.slot{height:80px;border-radius:22px;border:2px solid #E2DCEB;display:flex;align-items:center;justify-content:center;
+  font-size:28px;font-weight:600;color:#2E2A38;}
+.slot.on{background:#4A3B63;border-color:#4A3B63;color:#fff;}
+.sublabel{font-size:24px;font-weight:600;color:#645E73;letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px;}
+
+/* confirm */
+.okwrap{position:absolute;left:44px;right:44px;top:330px;text-align:center;}
+.okcircle{width:250px;height:250px;border-radius:50%;background:#4A3B63;margin:0 auto 50px;display:flex;
+  align-items:center;justify-content:center;box-shadow:0 0 0 26px #E7E1F0,0 24px 60px rgba(74,59,99,.35);}
+.okcircle svg{width:130px;height:130px;}
+.okwrap h2{font-family:'MxSerif';font-weight:700;font-size:56px;line-height:1.12;}
+.okwrap p{font-size:29px;color:#645E73;margin-top:22px;line-height:1.45;}
+.okcard{position:absolute;left:44px;right:44px;top:1010px;border-radius:32px;background:#fff;padding:30px 34px;
+  display:flex;align-items:center;gap:26px;box-shadow:0 10px 28px rgba(74,59,99,.09);}
+.okcard .avatar{width:96px;height:96px;font-size:36px;flex:none;}
+.okcard b{font-size:30px;font-weight:600;display:block;}
+.okcard span{font-size:25px;color:#645E73;}
+.chatfab{position:absolute;right:44px;top:124px;width:84px;height:84px;border-radius:42px;background:#4A3B63;
+  display:flex;align-items:center;justify-content:center;box-shadow:0 10px 26px rgba(74,59,99,.35);}
+.chatfab svg{width:42px;height:42px;}
+
+/* brand card */
+.brand{position:absolute;left:0;right:0;top:0;bottom:0;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;text-align:center;}
+.brand .logo{font-size:210px;line-height:1;}
+.brand .bar{width:420px;height:4px;background:#4A3B63;margin:54px 0 46px;border-radius:2px;}
+.brand .tagline{font-size:46px;font-weight:500;color:#2E2A38;}
+.brand .url{font-size:38px;font-weight:600;color:#4A3B63;margin-top:26px;letter-spacing:.02em;}
+.powered{position:absolute;left:0;right:0;bottom:130px;display:flex;align-items:center;justify-content:center;gap:18px;
+  font-size:26px;color:#645E73;}
+.powered img{width:54px;height:54px;}
+.powered b{color:#2E2A38;font-weight:600;letter-spacing:.04em;}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#ECE7F2;font-family:'MxSans',system-ui,sans-serif;color:#2E2A38;padding:48px 40px 80px;}
+header{max-width:1260px;margin:0 auto 36px;display:flex;align-items:flex-end;justify-content:space-between;gap:24px;}
+header h1{font-family:'MxSerif';font-weight:700;font-size:44px;}
+header h1 small{font-family:'MxSans';font-size:18px;font-weight:600;color:#fff;background:#4A3B63;border-radius:8px;
+  padding:4px 10px;vertical-align:middle;margin-left:10px;}
+header p{font-size:17px;color:#645E73;margin-top:6px;}
+.tagline-h{font-size:15px;font-weight:600;color:#4A3B63;background:#fff;border-radius:10px;padding:8px 14px;white-space:nowrap;}
+.grid{max-width:1260px;margin:0 auto;display:grid;grid-template-columns:repeat(3,380px);gap:40px 60px;justify-content:center;}
+.cell{position:relative;}
+.shot{width:360px;height:640px;border-radius:18px;overflow:hidden;position:relative;
+  box-shadow:0 18px 40px rgba(46,42,56,.18);background:#F4F1F8;}
+.zoom{width:1080px;height:1920px;zoom:0.33333;position:relative;}
+.label{display:flex;justify-content:space-between;margin-top:14px;font-size:13px;font-weight:700;letter-spacing:.08em;}
+.label span:last-child{color:#645E73;font-weight:500;letter-spacing:0;}
+.cell .note{font-size:14px;line-height:1.5;color:#4d4760;margin-top:8px;max-width:360px;}
+.cell .note b{color:#2E2A38;}
+.seam{display:inline-block;margin-top:10px;font-size:12px;font-weight:600;color:#4A3B63;background:#fff;border-radius:8px;padding:4px 10px;}
+.meta{width:360px;min-height:640px;background:#fff;border-radius:18px;padding:30px;}
+.meta h3{font-family:'MxSerif';font-size:30px;margin-bottom:16px;}
+.meta ol{padding-left:20px;font-size:15px;line-height:2;}
+.sw{display:flex;align-items:center;gap:12px;font-size:15px;margin-bottom:10px;}
+.sw i{width:34px;height:34px;border-radius:10px;border:1px solid #d9d2e3;}
+.type-s{font-family:'MxSerif';font-weight:700;font-size:22px;margin-top:18px;}
+.type-a{font-size:17px;margin-top:6px;}
+</style>
+</head>
+<body>
+<header>
+  <div><h1>MYLEX — демо приложения <small>v1</small></h1>
+  <p>Путь клиента: заставка → главная → поиск → каталог → профиль и запись → подтверждение → бренд.
+  Эскизы статичны: показан ключевой момент каждой сцены.</p></div>
+  <span class="tagline-h">1080×1920 · 20.0 с · 7 сцен · без звука</span>
+</header>
+<main class="grid">
+      <article class="cell" id="frame-01">
+        <div class="shot"><div class="zoom"><div class="stage"><div class="glow a"></div><div class="glow b"></div><div class="ghost">§</div><div class="rule"></div><div class="kicker">MYLEX · демо</div><div class="kicker-r">01 / 07</div><div class="headline" id="headline"><span class="hl-text">Нужен <em>юрист</em>?</span></div><div class="phone" id="phone"><div class="screen"><div class="island"></div><div class="status"><span>9:41</span><span class="icons"><i class="s"></i><i></i></span></div><div class="view" style="display:flex;align-items:center;justify-content:center;flex-direction:column;"><div class="logo" style="font-size:150px;">MYLEX</div><div style="font-size:28px;color:#645E73;margin-top:18px;letter-spacing:.14em;text-transform:uppercase;">юридические услуги</div></div></div></div></div></div></div>
+        <div class="label"><span>01 · ЗАСТАВКА</span><span>f01 · 0.0–2.2</span></div>
+        <p class="note"><b>Телефон поднимается снизу.</b> Буквы MYLEX собираются каскадом, затем логотип уменьшается и уезжает в шапку — мост в 02.</p>
+        <span class="seam">cut</span>
+      </article>
+      <article class="cell" id="frame-02">
+        <div class="shot"><div class="zoom"><div class="stage"><div class="glow a"></div><div class="glow b"></div><div class="ghost">§</div><div class="rule"></div><div class="kicker">MYLEX · демо</div><div class="kicker-r">02 / 07</div><div class="headline" id="headline"><span class="hl-text">Все юристы — <em>в одном</em> приложении</span></div><div class="phone" id="phone"><div class="screen"><div class="island"></div><div class="status"><span>9:41</span><span class="icons"><i class="s"></i><i></i></span></div><div class="view"><div class="appbar"><span class="logo">MYLEX</span><span class="iconbtn"><svg viewBox="0 0 24 24" fill="none" stroke="#4A3B63" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg></span></div><div class="search" style="top:228px;"><svg viewBox="0 0 24 24" fill="none" stroke="#4A3B63" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>Найти юриста или услугу</div><div class="stats" style="top:360px;"><div class="stat"><b>1200+</b><span>юристов</span></div><div class="stat-sep"></div><div class="stat"><b>40+</b><span>регионов</span></div><div class="stat-sep"></div><div class="stat"><b>4.9</b><span>рейтинг</span></div></div><div class="sec" style="top:568px;"><h3>Категории</h3><a>Все</a></div><div class="cats" style="top:640px;"><div class="cat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#4A3B63" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="7" r="3"/><circle cx="16.5" cy="8.5" r="2.5"/><path d="M2.5 20c0-3.6 2.5-6 5.5-6s5.5 2.4 5.5 6"/><path d="M13.5 15.2c.9-.8 1.9-1.2 3-1.2 2.6 0 4.5 2 4.5 5"/></svg></div><span>Семейное право</span></div><div class="cat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#4A3B63" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7"/><path d="M6 10v10h12V10"/><path d="M10 20v-5h4v5"/></svg></div><span>Недвижимость</span></div><div class="cat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#4A3B63" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M3 12h18"/></svg></div><span>Бизнес</span></div><div class="cat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#4A3B63" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M7 21h10"/><path d="M5 7h14"/><path d="M5 7l-3 7a3 3 0 0 0 6 0z"/><path d="M19 7l-3 7a3 3 0 0 0 6 0z"/></svg></div><span>Трудовые споры</span></div><div class="cat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#4A3B63" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h11a2 2 0 0 1 2 2v12"/><path d="M7 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2"/><path d="M9 8h7M9 12h7M9 16h4"/></svg></div><span>Наследство</span></div><div class="cat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#4A3B63" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg></div><span>Все услуги</span></div></div><div class="sec" style="top:1054px;"><h3>Рекомендуемые юристы</h3><a>Все →</a></div><div class="carousel" style="top:1126px;"><div class="lcard"><div class="avatar">АК</div><b>Алия Каримова</b><span class="tag">Семейное право</span><span class="rating"><i>★</i> 4.9 <small>(128)</small></span></div><div class="lcard"><div class="avatar">ТР</div><b>Тимур Рахимов</b><span class="tag">Семейное право</span><span class="rating"><i>★</i> 4.8 <small>(96)</small></span></div><div class="lcard"><div class="avatar">ДЮ</div><b>Дильноза Юсупова</b><span class="tag">Наследство</span><span class="rating"><i>★</i> 4.8 <small>(74)</small></span></div></div></div></div></div></div></div></div>
+        <div class="label"><span>02 · ГЛАВНАЯ</span><span>f02 · 2.2–5.6</span></div>
+        <p class="note"><b>Поиск выезжает сверху,</b> счётчики 1200+ / 40+ / 4.9 считаются вверх, категории волной, карусель въезжает справа.</p>
+        <span class="seam">в шапку (cut)</span>
+      </article>
+      <article class="cell" id="frame-03">
+        <div class="shot"><div class="zoom"><div class="stage"><div class="glow a"></div><div class="glow b"></div><div class="ghost">§</div><div class="rule"></div><div class="kicker">MYLEX · демо</div><div class="kicker-r">03 / 07</div><div class="headline" id="headline"><span class="hl-text">Найдите <em>своего</em> специалиста</span></div><div class="phone" id="phone"><div class="screen"><div class="island"></div><div class="status"><span>9:41</span><span class="icons"><i class="s"></i><i></i></span></div><div class="view"><div class="backrow"><span class="iconbtn"><svg viewBox="0 0 24 24" fill="none" stroke="#4A3B63" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></span><h2>Поиск</h2></div><div class="search active" style="top:236px;"><svg viewBox="0 0 24 24" fill="none" stroke="#4A3B63" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><span>семейный юрист<i class="caret"></i></span></div><div style="position:absolute;left:44px;top:372px;" class="sublabel">Подсказки</div><div class="chips" style="top:420px;"><div class="chip on">Семейное право</div><div class="chip">Развод и алименты</div><div class="chip">Брачный договор</div></div><div class="list" style="top:524px;"><div class="row"><svg viewBox="0 0 24 24" fill="none" stroke="#645E73" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><span><b>семейный юрист</b> <em>в Ташкенте</em></span></div><div class="row"><svg viewBox="0 0 24 24" fill="none" stroke="#645E73" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><span><b>семейный юрист</b> <em>онлайн</em></span></div></div><div class="kbd"><div class="krow"><div class=key>й</div><div class=key>ц</div><div class=key>у</div><div class=key>к</div><div class=key>е</div><div class=key>н</div><div class=key>г</div><div class=key>ш</div><div class=key>щ</div><div class=key>з</div><div class=key>х</div></div><div class="krow"><div class=key>ф</div><div class=key>ы</div><div class=key>в</div><div class=key>а</div><div class=key>п</div><div class=key>р</div><div class=key>о</div><div class=key>л</div><div class=key>д</div><div class=key>ж</div><div class=key>э</div></div><div class="krow"><div class="key w">⇧</div><div class=key>я</div><div class=key>ч</div><div class=key>с</div><div class=key>м</div><div class=key>и</div><div class=key>т</div><div class=key>ь</div><div class=key>б</div><div class=key>ю</div><div class="key w">⌫</div></div><div class="krow"><div class="key w">123</div><div class="key sp">пробел</div><div class="key go">Найти</div></div></div><div class="tap" style="left:196px;top:456px;"></div></div></div></div></div></div></div>
+        <div class="label"><span>03 · ПОИСК</span><span>f03 · 5.6–8.4</span></div>
+        <p class="note"><b>Касание строки поиска,</b> клавиатура поднимается, печатается «семейный юрист», касание чипа «Семейное право».</p>
+        <span class="seam">касание</span>
+      </article>
+      <article class="cell" id="frame-04">
+        <div class="shot"><div class="zoom"><div class="stage"><div class="glow a"></div><div class="glow b"></div><div class="ghost">§</div><div class="rule"></div><div class="kicker">MYLEX · демо</div><div class="kicker-r">04 / 07</div><div class="headline" id="headline"><span class="hl-text">Фильтры — по делу <em>и региону</em></span></div><div class="phone" id="phone"><div class="screen"><div class="island"></div><div class="status"><span>9:41</span><span class="icons"><i class="s"></i><i></i></span></div><div class="view"><div class="backrow"><span class="iconbtn"><svg viewBox="0 0 24 24" fill="none" stroke="#4A3B63" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></span><h2>Каталог юристов</h2></div><div class="pills"><div class="pill">Тип услуги<svg style="width:26px;height:26px" viewBox="0 0 24 24" fill="none" stroke="#4A3B63" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10l5 5 5-5"/></svg></div><div class="pill on">Категория: семейное</div><div class="pill">Регион</div><div class="pill">Сортировка: по рейтингу</div></div><div class="count"><b>48 юристов</b> · семейное право</div><div class="pcards"><div class="pcard"><div class="avatar">АК</div><div class="body"><b>Алия Каримова</b><span class="spec">Семейное право</span><span class="rating"><i>★</i> 4.9 <small>(128 отзывов)</small></span><div class="meta"><span class="price">от 150 000 сум</span><span class="region">Ташкент</span></div></div></div><div class="pcard"><div class="avatar">ТР</div><div class="body"><b>Тимур Рахимов</b><span class="spec">Семейное право</span><span class="rating"><i>★</i> 4.8 <small>(96 отзывов)</small></span><div class="meta"><span class="price">от 120 000 сум</span><span class="region">Ташкент</span></div></div></div><div class="pcard"><div class="avatar">ДЮ</div><div class="body"><b>Дильноза Юсупова</b><span class="spec">Наследство</span><span class="rating"><i>★</i> 4.8 <small>(74 отзывов)</small></span><div class="meta"><span class="price">от 200 000 сум</span><span class="region">Самарканд</span></div></div></div></div><div class="scrim"></div><div class="sheet"><div class="handle"></div><h4>Регион</h4><div class="radio on"><i></i>Ташкент</div><div class="radio"><i></i>Самарканд</div><div class="radio"><i></i>Бухара</div><div class="radio"><i></i>Фергана</div><div class="btn" style="margin-top:30px;">Применить</div></div></div></div></div></div></div></div>
+        <div class="label"><span>04 · КАТАЛОГ</span><span>f04 · 8.4–11.4</span></div>
+        <p class="note"><b>Экран въезжает справа,</b> карточки каскадом; касание «Регион» — шторка с вариантами, выбор «Ташкент», шторка уходит.</p>
+        <span class="seam">slide-left</span>
+      </article>
+      <article class="cell" id="frame-05">
+        <div class="shot"><div class="zoom"><div class="stage"><div class="glow a"></div><div class="glow b"></div><div class="ghost">§</div><div class="rule"></div><div class="kicker">MYLEX · демо</div><div class="kicker-r">05 / 07</div><div class="headline" id="headline"><span class="hl-text">Запишитесь <em>в пару касаний</em></span></div><div class="phone" id="phone"><div class="screen"><div class="island"></div><div class="status"><span>9:41</span><span class="icons"><i class="s"></i><i></i></span></div><div class="view"><div class="appbar" style="top:112px;"><span class="iconbtn"><svg viewBox="0 0 24 24" fill="none" stroke="#4A3B63" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></span><span class="iconbtn"><svg viewBox="0 0 24 24" fill="none" stroke="#4A3B63" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></span></div><div class="prof"><div class="avatar">АК</div><h2>Алия Каримова</h2><div class="spec">Семейное право · Ташкент</div><div class="rating"><i>★</i> 4.9 <small>· 128 отзывов</small></div></div><div class="bio">Разводы, алименты, раздел имущества.<br>Помогаю договориться без суда.</div><div class="schips"><div class="schip">120 дел</div><div class="schip">8 лет опыта</div><div class="schip">Ответ за 15 мин</div></div><div class="btn" style="position:absolute;left:44px;right:44px;top:914px;">Забронировать консультацию</div><div class="scrim"></div><div class="sheet"><div class="handle"></div><h4>Выберите время</h4><div class="sublabel">Сентябрь – октябрь</div><div class="days"><div class="day on">Вт<b>29</b></div><div class="day">Ср<b>30</b></div><div class="day">Чт<b>1</b></div><div class="day">Пт<b>2</b></div></div><div class="sublabel">Время консультации</div><div class="slots"><div class="slot">10:00</div><div class="slot">12:30</div><div class="slot on">15:00</div><div class="slot">17:00</div></div><div class="btn">Подтвердить</div></div></div></div></div></div></div></div>
+        <div class="label"><span>05 · ПРОФИЛЬ И ЗАПИСЬ</span><span>f05 · 11.4–14.6</span></div>
+        <p class="note"><b>Аватар карточки вырастает в профиль.</b> Нажатие «Забронировать консультацию» — шторка времени, касание 15:00.</p>
+        <span class="seam">shared zoom</span>
+      </article>
+      <article class="cell" id="frame-06">
+        <div class="shot"><div class="zoom"><div class="stage"><div class="glow a"></div><div class="glow b"></div><div class="ghost">§</div><div class="rule"></div><div class="kicker">MYLEX · демо</div><div class="kicker-r">06 / 07</div><div class="headline" id="headline"><span class="hl-text">Готово. Юрист <em>уже в курсе</em></span></div><div class="phone" id="phone"><div class="screen"><div class="island"></div><div class="status"><span>9:41</span><span class="icons"><i class="s"></i><i></i></span></div><div class="view" style="background:#FBFAFD;"><div class="chatfab"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 18l-1 3 4-2h9a3 3 0 0 0 3-3V8a3 3 0 0 0-3-3H7a3 3 0 0 0-3 3v7"/></svg></div><div class="okwrap"><div class="okcircle"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div><h2>Заявка отправлена<br>юристу</h2><p>Юрист ответит в течение 15 минут</p></div><div class="okcard"><div class="avatar">АК</div><div><b>Алия Каримова</b><span>Вт, 29 сентября · 15:00</span></div></div><div class="btn ghost" style="position:absolute;left:44px;right:44px;top:1200px;">Перейти в чат</div></div></div></div></div></div></div>
+        <div class="label"><span>06 · ПОДТВЕРЖДЕНИЕ</span><span>f06 · 14.6–17.0</span></div>
+        <p class="note"><b>Нажатие «Подтвердить»:</b> круг пружинит, галочка рисуется, лёгкий наезд камеры, удержание ~1 с (held frame).</p>
+        <span class="seam">cut</span>
+      </article>
+      <article class="cell" id="frame-07">
+        <div class="shot"><div class="zoom"><div class="stage"><div class="glow a"></div><div class="glow b"></div><div class="ghost">§</div><div class="rule"></div><div class="kicker">MYLEX · демо</div><div class="kicker-r">07 / 07</div><div class="brand"><div class="logo">MYLEX</div><div class="bar"></div><div class="tagline">Юридическая помощь — в один клик</div><div class="url">mylex.uz</div></div><div class="powered">Powered by <img src="assets/brand/turgunov-mark.svg" alt=""><b>Turgunov Technologies</b></div></div></div></div>
+        <div class="label"><span>07 · БРЕНД</span><span>f07 · 17.0–20.0</span></div>
+        <p class="note"><b>Телефон уходит вниз,</b> MYLEX собирается каскадом (повтор 01), линия рисуется, слоган, mylex.uz, Powered by.</p>
+        <span class="seam">phone exit ↓</span>
+      </article>
+      <article class="cell meta">
+        <h3>Швы</h3><ol><li>01→02 логотип в шапку</li><li>02→03 касание поиска</li><li>03→04 slide-left</li><li>04→05 аватар-zoom</li><li>05→06 нажатие «Подтвердить»</li><li>06→07 телефон вниз</li></ol>
+        <p class="note">Одно направление: новые экраны приходят справа налево внутри телефона; заголовок сверху
+        меняется снизу вверх. Телефон не покидает кадр до 07.</p>
+      </article>
+      <article class="cell meta">
+        <h3>Токены</h3>
+        <div class="sw"><i style="background:#F4F1F8"></i>фон #F4F1F8</div>
+        <div class="sw"><i style="background:#4A3B63"></i>бренд #4A3B63</div>
+        <div class="sw"><i style="background:#2E2A38"></i>текст #2E2A38</div>
+        <div class="sw"><i style="background:#E7E1F0"></i>мягкий #E7E1F0</div>
+        <div class="sw"><i style="background:#E0664F"></i>коралл — только SOS</div>
+        <p class="type-s">PT Serif 700 — заголовки, логотип</p>
+        <p class="type-a">Inter 400–700 — интерфейс</p>
+        <p class="note"><b>Запреты:</b> тёмная тема, неон, градиентный текст, выдуманные лица, слайд-шоу.</p>
+      </article>
+</main>
+</body>
+</html>
